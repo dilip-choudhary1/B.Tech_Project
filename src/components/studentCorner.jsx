@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import './studentcorner.css';
 
 function StudentCorner() {
   const [selectedMess, setSelectedMess] = useState(null);
@@ -105,7 +106,7 @@ function StudentCorner() {
   };
 
   return (
-    <div className="student-corner" style={{ alignContent: 'center', justifyContent: 'center', marginLeft: '35rem' }}>
+    <div className="student-corner" style={{ }}>
       <h2>Welcome to the Student Corner</h2>
       <h3>Choose your mess</h3>
       <div className="mess-buttons">

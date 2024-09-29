@@ -1,12 +1,14 @@
 /* General styling */
+
 body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
   background-color: #f4f4f4;
-  height: 100vh;
+  height: 100%;
+  width: 100%;
   display: flex;
-
+  flex-direction: column;
 }
 
 nav {
@@ -15,9 +17,9 @@ nav {
   margin: 0;
   display: flex;
   justify-content: center;
-  position: fixed;
+  position: relative;
   top: 0;
-  width: 100%;
+  width: 100vw;
   z-index: 1;
 }
 
@@ -26,6 +28,7 @@ nav ul {
   padding: 0;
   margin: 0;
   display: flex;
+  justify-content: space-between;
 }
 
 nav ul li {
@@ -40,7 +43,11 @@ nav ul li:hover {
 }
 
 .content {
-  padding: 80px 20px 20px 20px; /* Adjust padding to account for fixed navbar */
+  padding: 80px 20px 20px 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 h2 {
@@ -48,20 +55,14 @@ h2 {
 }
 
 /* Specific page styles */
-/* .home-page {
-  background-color: #e3f2fd;
-  padding: 20px;
-  border-radius: 8px;
-  margin: 0;
-  display: flex;
-  justify-content: center;
-  position: fixed;
-  width: 100%;
-} */
 
 .home-page {
   text-align: center;
   padding: 20px;
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  align-items: center;
 }
 
 .info-text {
@@ -91,20 +92,6 @@ h2 {
   background-color: #45a049;
 }
 
-
-
-/* 
-.student-corner {
-  background-color: #ffe0b2;
-  padding: 20px;
-  border-radius: 8px;
-  display: flex;
-  justify-content: center;
-  position: fixed;
-  width: 100%;
-} */
-
-
 .student-corner {
   background-color: #ffe0b2;
   padding: 20px;
@@ -113,7 +100,6 @@ h2 {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  /* min-height: 100vh; */
   box-sizing: border-box;
 }
 
@@ -149,22 +135,15 @@ h2 {
   font-weight: bold;
 }
 
-@media (max-width: 600px) {
-  .mess-buttons {
-    flex-direction: column;
-    gap: 10px;
-  }
-}
-
 .sign-up-page {
   background-color: #c8e6c9;
   padding: 2rem;
   justify-content: center;
   border-radius: 1rem;
-  width: 90%;
-  max-width: 500px;
+  width: 70%;
+  max-width: 400px;
   box-shadow: 0 0.4rem 0.8rem rgba(0, 0, 0, 0.1);
-  margin: 0 auto; /* Center the form horizontally */
+  margin: 0 auto;
 }
 
 .sign-up-page h2 {
@@ -222,8 +201,8 @@ h2 {
   padding: 2rem;
   justify-content: center;
   border-radius: 1rem;
-  width: 90%;
-  max-width: 500px;
+  width: 70%;
+  max-width: 400px;
   box-shadow: 0 0.4rem 0.8rem rgba(0, 0, 0, 0.1);
   margin: 0 auto;
 }

@@ -1,0 +1,128 @@
+.student-corner {
+    background-color: #ffe0b2;
+    padding: 20px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    max-width: 500px;
+    margin: 40px auto;
+  }
+  
+  .student-corner h2 {
+    margin: 10px 0;
+    color: #333;
+  }
+  
+  .student-corner h3 {
+    margin: 10px 0;
+    color: #333;
+  }
+  
+  .mess-buttons {
+    display: flex;
+    gap: 20px;
+    margin: 20px 0;
+  }
+  
+  .mess-buttons button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .mess-buttons button:hover {
+    background-color: #45a049;
+  }
+  
+  .date-picker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px 0;
+  }
+  
+  .date-picker label {
+    margin-bottom: 10px;
+    color: rgb(0, 0, 0);
+  }
+  
+  .date-picker .react-datepicker-wrapper {
+    width: 100%;
+  }
+  
+  .date-picker .react-datepicker__input-container {
+    width: 100%;
+  }
+  
+  .date-picker .react-datepicker__input-container input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .submit-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .submit-button:hover {
+    background-color: #45a049;
+  }
+  
+  .mess-selection {
+    margin-top: 20px;
+    color: #06ff16;
+    font-weight: bold;
+  }
+  
+  .error-message {
+    margin-top: 20px;
+    color: #ff0000;
+    font-weight: bold;
+  }
+  
+  /* Responsive design */
+  
+  @media (max-width: 768px) {
+    .student-corner {
+      padding: 10px;
+    }
+    .mess-buttons {
+      flex-direction: column;
+      gap: 10px;
+    }
+    .date-picker {
+      margin: 10px 0;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .student-corner {
+      padding: 5px;
+    }
+    .mess-buttons button {
+      padding: 5px 10px;
+    }
+    .date-picker label {
+      margin-bottom: 5px;
+    }
+    .date-picker .react-datepicker__input-container input {
+      padding: 5px;
+    }
+    .submit-button {
+      padding: 5px 10px;
+    }
+  }

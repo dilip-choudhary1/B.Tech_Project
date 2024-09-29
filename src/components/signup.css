@@ -1,0 +1,105 @@
+.sign-up-page {
+    max-width: 400px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .sign-up-form {
+    margin-top: 20px;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 10px;
+  }
+  
+  .form-group input[type="text"], .form-group input[type="password"] {
+    width: 100%;
+    height: 40px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .submit-button {
+    width: 100%;
+    height: 40px;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .submit-button:hover {
+    background-color: #3e8e41;
+  }
+  
+  .fingerprint-image {
+    width: 100%;
+    height: 200px;
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  /* Responsive design */
+  
+  @media (max-width: 768px) {
+    .sign-up-page {
+      margin: 20px auto;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .sign-up-page {
+      margin: 10px auto;
+    }
+    .form-group input[type="text"], .form-group input[type="password"] {
+      height: 30px;
+    }
+    .submit-button {
+      height: 30px;
+    }
+  }
+  
+  /* Add some animations */
+  
+  .sign-up-form {
+    animation: fadeIn 1s;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  /* Add some hover effects */
+  
+  .form-group input[type="text"], .form-group input[type="password"] {
+    transition: border-color 0.3s ease-in-out;
+  }
+  
+  .form-group input[type="text"]:hover, .form-group input[type="password"]:hover {
+    border-color: #aaa;
+  }
+  
+  .submit-button {
+    transition: background-color 0.3s ease-in-out;
+  }
+  .submit-button:hover {
+    background-color: #3e8e41;
+  }
