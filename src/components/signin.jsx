@@ -1,20 +1,20 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function SignIn() {
-  const [rollnumber, setRollNumber] = useState('');
-  const [password, setPassword] = useState('');
-  const [message, setMessage] = useState('');
+  const [rollnumber, setRollNumber] = useState("");
+  const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost/api/v1/users/login', {
-        method: 'POST',
+      const response = await fetch("http://localhost/api/v1/users/login", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ rollnumber, password }),
       });
@@ -22,14 +22,14 @@ function SignIn() {
       const data = await response.json();
 
       if (response.ok) {
-        localStorage.setItem('user', JSON.stringify({ rollnumber })); // Save user details in local storage
-        navigate('/student-corner'); // Redirect to StudentCorner
+        localStorage.setItem("user", JSON.stringify({ rollnumber })); // Save user details in local storage
+        navigate("/student-corner"); // Redirect to StudentCorner
       } else {
-        setMessage(data.message || 'Login failed!');
+        setMessage(data.message || "Login failed!");
       }
     } catch (error) {
-      console.error('Error:', error);
-      setMessage('An error occurred. Please try again later.');
+      console.error("Error:", error);
+      setMessage("An error occurred. Please try again later.");
     }
   };
 
@@ -59,7 +59,9 @@ function SignIn() {
             required
           />
         </div>
-        <button type="submit" className="submit-button">Sign In</button>
+        <button type="submit" className="submit-button">
+          Sign In
+        </button>
       </form>
       {message && <p>{message}</p>}
     </div>

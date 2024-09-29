@@ -9,7 +9,7 @@
 
 //   const handleSubmit = async (e) => {
 //     e.preventDefault();
-    
+
 //     if (password !== confirmPassword) {
 //       setMessage('Passwords do not match!');
 //       return;
@@ -94,67 +94,61 @@
 
 // export default SignUp;
 
-
-
-
-import { useState } from 'react';
-import { S3 } from '@aws-sdk/client-s3'; // Import S3 client
-import { CaptureFinger } from './scanner.js';
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
-import { fromEnv } from '@aws-sdk/credential-provider-env';
-// import './signup.css';
-
-// Configure AWS with your credentials and region
-
+import { useState } from "react";
+import { CaptureFinger } from "./scanner.js";
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 
 function SignUp() {
-  const [email, setEmail] = useState('');
-  const [rollnumber, setRollNumber] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [message, setMessage] = useState('');
+  const [email, setEmail] = useState("");
+  const [rollnumber, setRollNumber] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [message, setMessage] = useState("");
   const [fingerprintImage, setFingerprintImage] = useState(null);
   const [fingerprintURL, setFingerprintURL] = useState(null);
-  const [fingerprintKey, setFingerprintKey] = useState('');
+  const [fingerprintKey, setFingerprintKey] = useState("");
 
   const s3 = new S3Client({
-    region: 'ap-south-1',
+    region: import.meta.env.VITE_AWS_REGION,
     credentials: {
-      accessKeyId: 'AKIA6HVQPYLL4TWGJ3FN',
-      secretAccessKey: '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',
+      accessKeyId: import.meta.env.VITE_AWS_ACCESS_KEY_ID,
+      secretAccessKey: import.meta.env.VITE_AWS_SECRET_ACCESS_KEY,
     },
   });
-  
-  // Create S3 instance
-  // const s3 = new AWS.S3();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (password !== confirmPassword) {
-      setMessage('Passwords do not match!');
+      setMessage("Passwords do not match!");
       return;
     }
 
     try {
-      const response = await fetch('http://localhost/api/v1/users', {
-        method: 'POST',
+      const response = await fetch("http://localhost/api/v1/users", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, rollnumber, password, fingerprintKey, fingerprintImageUrl: fingerprintURL }),
+        body: JSON.stringify({
+          email,
+          rollnumber,
+          password,
+          fingerprintKey,
+          fingerprintImageUrl: fingerprintURL,
+        }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        setMessage('User registered successfully!');
+        setMessage("User registered successfully!");
       } else {
-        setMessage(data.message || 'Registration failed!');
+        setMessage(data.message || "Registration failed!");
       }
     } catch (error) {
-      console.error('Error:', error);
-      setMessage('An error occurred. Please try again later.');
+      console.error("Error:", error);
+      setMessage("An error occurred. Please try again later.");
     }
   };
 
@@ -162,15 +156,20 @@ function SignUp() {
     try {
       const quality = 50;
       const timeout = 100;
-      console.log('Calling CaptureFinger with quality:', quality, 'and timeout:', timeout);
-      
+      console.log(
+        "Calling CaptureFinger with quality:",
+        quality,
+        "and timeout:",
+        timeout
+      );
+
       const response = await CaptureFinger(quality, timeout);
-      console.log('Fingerprint Capture Response:', response);
-      
+      console.log("Fingerprint Capture Response:", response);
+
       if (!response || !response.data) {
-        throw new Error('No response data');
+        throw new Error("No response data");
       }
-      
+
       const fingerprintImage = response.data.BitmapData;
       const fingerprintKey = response.data.AnsiTemplate;
       // Convert Base64 image to binary data (Uint8Array) in the browser
@@ -182,28 +181,32 @@ function SignUp() {
         binaryArray[i] = binaryString.charCodeAt(i);
       }
       const params = {
-        Bucket: 'btech-project-bucket',
+        Bucket: import.meta.env.VITE_BUCKET_NAME,
         Key: `fingerprints/${rollnumber}.png`,
         Body: binaryArray,
-        ContentType: 'image/jpeg',
+        ContentType: "image/png",
       };
-    
+
       const command = new PutObjectCommand(params);
       await s3.send(command);
 
-      const imageUrl = `https://${params.Bucket}.s3.${'ap-south-1'}.amazonaws.com/fingerprints/${params.Key}`;
+      const imageUrl = `https://${params.Bucket}.s3.${
+        import.meta.env.VITE_AWS_REGION
+      }.amazonaws.com/fingerprints/${params.Key}`;
 
       setFingerprintURL(imageUrl);
       setFingerprintImage(fingerprintImage);
       setFingerprintKey(fingerprintKey);
 
-      console.log('Fingerprint image uploaded successfully. Image URL:', imageUrl);
+      console.log(
+        "Fingerprint image uploaded successfully. Image URL:",
+        imageUrl
+      );
     } catch (error) {
-      console.error('Error during fingerprint capture:', error);
-      setMessage('Fingerprint capture failed!');
+      console.error("Error during fingerprint capture:", error);
+      setMessage("Fingerprint capture failed!");
     }
   };
-  
 
   return (
     <div className="sign-up-page">
@@ -255,12 +258,19 @@ function SignUp() {
         </div>
         <div className="form-group">
           <label>Fingerprint Registration</label>
-          <button type="button" onClick={handleFingerprintCapture}>Capture Fingerprint</button>
+          <button type="button" onClick={handleFingerprintCapture}>
+            Capture Fingerprint
+          </button>
           {fingerprintImage && (
-            <img src={`data:image/jpeg;base64,${fingerprintImage}`} alt="Fingerprint Image" />
+            <img
+              src={`data:image/jpeg;base64,${fingerprintImage}`}
+              alt="Fingerprint Image"
+            />
           )}
         </div>
-        <button type="submit" className="submit-button">Sign Up</button>
+        <button type="submit" className="submit-button">
+          Sign Up
+        </button>
       </form>
       {message && <p>{message}</p>}
     </div>
