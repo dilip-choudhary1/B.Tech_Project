@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useGlobalContext } from '../GlobalContext';
 
 function SignIn() {
+  const { globalVariable, setGlobalVariable} = useGlobalContext();
   const [rollnumber, setRollNumber] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
@@ -11,27 +13,36 @@ function SignIn() {
     e.preventDefault();
 
     try {
+      const role = "students"
       const response = await fetch("http://localhost/api/v1/users/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ rollnumber, password }),
+        body: JSON.stringify({ role, password, rollnumber }),
       });
 
-      const data = await response.json();
+      const res = await response.json();
+      console.log(globalVariable);
+      console.log("api responce : ",res.data.authToken);
+      setGlobalVariable(res.data.authToken);
+      console.log("set global responce : ",globalVariable);
 
       if (response.ok) {
         localStorage.setItem("user", JSON.stringify({ rollnumber })); // Save user details in local storage
         navigate("/student-corner"); // Redirect to StudentCorner
       } else {
-        setMessage(data.message || "Login failed!");
+        setMessage(res.message || "Login failed!");
       }
     } catch (error) {
       console.error("Error:", error);
       setMessage("An error occurred. Please try again later.");
     }
   };
+  useEffect(() => {
+    console.log('localStorage globalVariable:', localStorage.getItem('globalVariable'));
+  }, [globalVariable]);
+  
 
   return (
     <div className="sign-in-page">

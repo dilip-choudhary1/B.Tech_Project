@@ -20,6 +20,7 @@ export const CaptureFinger = async (quality, timeout) => { // 2nd
     TimeOut: timeout,
   };
   const jsondata = JSON.stringify(MFS100Request);
+  
   return await PostMFS100Client("capture", jsondata);
 };
 
@@ -34,13 +35,14 @@ const CaptureMultiFinger = async (quality, timeout, nooffinger) => {
   return await PostMFS100Client("capturewithdeduplicate", jsondata);
 };
 
-const VerifyFinger = async (ProbFMR, GalleryFMR) => {
+export const VerifyFinger = async (ProbFMR, GalleryFMR) => {
   const MFS100Request = {
     ProbTemplate: ProbFMR,
     GalleryTemplate: GalleryFMR,
     BioType: "FMR", // or "ANSI" if using ANSI Template
   };
   const jsondata = JSON.stringify(MFS100Request);
+  console.log("json data: ",jsondata);
   return await PostMFS100Client("verify", jsondata);
 };
 

@@ -92,14 +92,17 @@
 //   );
 // }
 
+
+
 // export default SignUp;
 
+import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { useState } from "react";
-import { CaptureFinger } from "./scanner.js";
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { CaptureFinger, VerifyFinger } from "../scanner.js";
 
 function SignUp() {
   const [email, setEmail] = useState("");
+  // const [role, setRole] = useState("");
   const [rollnumber, setRollNumber] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -123,23 +126,28 @@ function SignUp() {
       setMessage("Passwords do not match!");
       return;
     }
-
+    const role ="students";
+    const dataToSend = {
+      role,
+      email,
+      rollnumber,
+      password,
+      // fingerprintKey,
+      // fingerprintImageUrl: fingerprintURL,
+    };
+    console.log(dataToSend);
     try {
       const response = await fetch("http://localhost/api/v1/users", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          email,
-          rollnumber,
-          password,
-          fingerprintKey,
-          fingerprintImageUrl: fingerprintURL,
-        }),
+        body: JSON.stringify(dataToSend),
+        // console.log(body);
       });
 
       const data = await response.json();
+      console.log(response);
 
       if (response.ok) {
         setMessage("User registered successfully!");
@@ -169,13 +177,16 @@ function SignUp() {
       if (!response || !response.data) {
         throw new Error("No response data");
       }
-
+      
       const fingerprintImage = response.data.BitmapData;
       const fingerprintKey = response.data.AnsiTemplate;
-      // Convert Base64 image to binary data (Uint8Array) in the browser
-      const binaryString = window.atob(fingerprintImage); // Decode base64 to binary string
+      const iso = response.data.IsoTemplate
+
+      const binaryString = window.atob(fingerprintImage);
       const binaryLength = binaryString.length;
       const binaryArray = new Uint8Array(binaryLength);
+      const response1 = await VerifyFinger(iso, iso);
+      console.log("Verify Response:", response1);
 
       for (let i = 0; i < binaryLength; i++) {
         binaryArray[i] = binaryString.charCodeAt(i);
@@ -256,7 +267,7 @@ function SignUp() {
             required
           />
         </div>
-        <div className="form-group">
+        {/* <div className="form-group">
           <label>Fingerprint Registration</label>
           <button type="button" onClick={handleFingerprintCapture}>
             Capture Fingerprint
@@ -267,7 +278,7 @@ function SignUp() {
               alt="Fingerprint Image"
             />
           )}
-        </div>
+        </div> */}
         <button type="submit" className="submit-button">
           Sign Up
         </button>

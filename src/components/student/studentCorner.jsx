@@ -1,9 +1,11 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { useGlobalContext } from "../GlobalContext";
 import './studentcorner.css';
 
 function StudentCorner() {
+  const { globalVariable, setGlobalVariable} = useGlobalContext();
   const [selectedMess, setSelectedMess] = useState(null);
   const [messChoice, setMessChoice] = useState('');
   const [startDate, setStartDate] = useState(new Date());
@@ -25,6 +27,7 @@ function StudentCorner() {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
+            "Authorization": `Bearer ${globalVariable}`
           },
         });
 
@@ -36,6 +39,7 @@ function StudentCorner() {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
+              "Authorization": `Bearer ${globalVariable}`
             },
           });
 
@@ -69,21 +73,23 @@ function StudentCorner() {
   const handleMessSelection = async (mess) => {
     setSelectedMess(`You have chosen ${mess}`);
     try {
-      const user = JSON.parse(localStorage.getItem('user'));
-      const userResponse = await fetch(`http://localhost/api/v1/users/${user.rollnumber}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      // const user = JSON.parse(localStorage.getItem('user'));
+      // const userResponse = await fetch(`http://localhost/api/v1/users/${user.rollnumber}`, {
+      //   method: 'GET',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     "Authorization": `Bearer ${globalVariable}`
+      //   },
+      // });
 
-      const userData = await userResponse.json();
-      const userId = userData.data.user._id;
+      // const userData = await userResponse.json();
+      // const userId = userData.data.user._id;
       setMessChoice(mess);
-      const response = await fetch(`http://localhost/api/v1/mess/choose-mess/${userId}`, {
+      const response = await fetch(`http://localhost/api/v1/mess/choose-mess`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          "Authorization": `Bearer ${globalVariable}`
         },
         body: JSON.stringify({ 
           startDate: formatDate(startDate), 

@@ -96,6 +96,15 @@
   .form-group input[type="text"]:hover, .form-group input[type="password"]:hover {
     border-color: #aaa;
   }
+
+  .form-group select[type="text"], .form-group input[type="password"] {
+    transition: border-color 0.3s ease-in-out;
+  }
+  
+  .form-group select[type="text"]:hover, .form-group input[type="password"]:hover {
+    border-color: #aaa;
+  }
+  
   
   .submit-button {
     transition: background-color 0.3s ease-in-out;

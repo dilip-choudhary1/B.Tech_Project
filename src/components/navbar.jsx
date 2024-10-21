@@ -5,10 +5,12 @@ function Navbar() {
   return (
     <nav>
       <ul>
-        <li><Link to="/">Home</Link></li>
+        {/* <li><Link to="/">Home</Link></li>
         <li><Link to="/student-corner">Student Corner</Link></li>
         <li><Link to="/sign-up">Sign Up</Link></li>
         <li><Link to="/sign-in">Sign In</Link></li>
+        <li><Link to="/verify">Verify User</Link></li>
+        <li><Link to="/Register">Register</Link></li> */}
       </ul>
     </nav>
   );
