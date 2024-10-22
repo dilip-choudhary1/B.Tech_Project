@@ -31,13 +31,14 @@ function SignIn1() {
       setGlobalVariable(res.data.authToken);
       console.log("set global responce : ", globalVariable);
 
-      if (response.ok && (role == "admin" || role == "mess")) {
+      if (response.ok && (role=='admin')) {
         localStorage.setItem("user", JSON.stringify({ rollnumber })); // Save user details in local storage
         navigate("/register"); // Redirect to StudentCorner
       } else if (response.ok && role == "mess") {
         localStorage.setItem("user", JSON.stringify({ rollnumber })); // Save user details in local storage
-        navigate("/admin-portal"); // Redirect to StudentCorner
-      } else {
+        navigate("/verify"); // Redirect to StudentCorner
+      } 
+      else {
         setMessage(res.message || "Login failed!");
       }
     } catch (error) {
@@ -53,7 +54,7 @@ function SignIn1() {
   }, [globalVariable]);
 
   return (
-    <div className="sign-in-page">
+    <div className="sign-in-page w-screen h-full mt-10">
       <h2>Sign In Page</h2>
       <form className="sign-in-form" onSubmit={handleSubmit}>
         <div className="form-group">

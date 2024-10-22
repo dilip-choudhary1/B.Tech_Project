@@ -1,7 +1,7 @@
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { useState } from "react";
+import { useGlobalContext } from "../GlobalContext.jsx";
 import { CaptureFinger, VerifyFinger } from "../scanner.js";
-import { useGlobalContext } from "../GlobalContext";
 
 function RegisterUser() {
   const [email, setEmail] = useState("");
@@ -23,34 +23,59 @@ function RegisterUser() {
       secretAccessKey: import.meta.env.VITE_AWS_SECRET_ACCESS_KEY,
     },
   });
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
+  const fetchUserID = async()=>{
     try {
-      const response = await fetch(
-        `http://localhost/api/v1/users/get-student/${rollnumber}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${globalVariable}`, // Ensure globalVariable contains the correct token
-          },
-        }
-      );
-      // console.log(response.json());
+      const response = await fetch(`http://localhost/api/v1/users/get-student/${rollnumber}`, {
+        method: "GET",
+        headers: {
+          'Content-Type': 'application/json',
+          "Authorization": `Bearer ${globalVariable}` // Ensure globalVariable contains the correct token
+        },
+      });
       const data1 = await response.json();
-      console.log(data1);
-      console.log("user id is : ", data1.data._id);
-      setUserId(response.body.data._id);
+      console.log("user id is : ",data1.data._id);
+      setUserId(data1.data._id);
+      console.log(userId);
       console.log(globalVariable);
       if (response.ok) {
         setMessage("data fetched Successfully");
+        return data1.data._id;
+      } else {
+        setMessage(data.message || "Registration failed!");
+        return null;
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      setMessage("An error occurred. Please try again later.");
+      return null;
+    };
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const userIID = await fetchUserID();
+    try {
+      const response = await fetch(`http://localhost/api/v1/users/add-ansiKey/${userIID}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${globalVariable}`
+        },
+        body: JSON.stringify({
+          ansiKey : fingerprintKey,
+          ansiImageUrl : fingerprintURL,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setMessage("User registered successfully!");
       } else {
         setMessage(data.message || "Registration failed!");
       }
     } catch (error) {
-      console.error("Error:", error);
+      console.error("here Error:", error);
       setMessage("An error occurred. Please try again later.");
     }
 
@@ -143,7 +168,7 @@ function RegisterUser() {
   };
 
   return (
-    <div className="sign-up-page">
+    <div className="sign-up-page w-screen h-full mt-10">
       <h2>Sign Up</h2>
       <form className="sign-up-form" onSubmit={handleSubmit}>
         {/* <div className="form-group">

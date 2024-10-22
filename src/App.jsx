@@ -1,21 +1,21 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
+import AdminCorner from './components/admin/admin';
+import RegisterUser from './components/admin/registerUser';
 import Home from './components/home';
-import RegisterUser from './components/mess/registerUser';
+import SignIn1 from './components/mess/signin';
 import VerifyUser from './components/mess/verifyfinger';
 import Navbar from './components/navbar';
 import SignIn from './components/student/signin';
 import SignUp from './components/student/signup';
 import StudentCorner from './components/student/studentCorner';
-import SignIn1 from './components/mess/signin';
-import AdminCorner from './components/admin/admin';
 
 
 function App() {
   return (
     <>
-      <Navbar />
+      {/* <Navbar /> */}
       <div className="content">
         <Routes>
           <Route path="/" element={<Home />} />
