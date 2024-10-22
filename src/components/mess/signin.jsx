@@ -29,13 +29,13 @@ function SignIn1() {
       setGlobalVariable(res.data.authToken);
       console.log("set global responce : ",globalVariable);
 
-      if (response.ok && (role=='admin' || role=='mess')) {
+      if (response.ok && (role=='admin')) {
         localStorage.setItem("user", JSON.stringify({ rollnumber })); // Save user details in local storage
         navigate("/register"); // Redirect to StudentCorner
       } 
       else if (response.ok && role=='mess') {
         localStorage.setItem("user", JSON.stringify({ rollnumber })); // Save user details in local storage
-        navigate("/admin-portal"); // Redirect to StudentCorner
+        navigate("/verify"); // Redirect to StudentCorner
       } 
       else {
         setMessage(res.message || "Login failed!");

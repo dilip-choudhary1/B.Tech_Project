@@ -5,6 +5,7 @@ import { useLocation } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { CaptureFinger, GetMFS100Info, VerifyFinger } from "../scanner.js";
+import { useGlobalContext } from "../GlobalContext.jsx";
 
 const VerifyUser = () => {
   const location = useLocation();
@@ -14,6 +15,9 @@ const VerifyUser = () => {
   const [fingerprintCaptured, setFingerprintCaptured] = useState(false);
   const [ansiTemplate, setAnsiTemplate] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const { globalVariable, setGlobalVariable} = useGlobalContext();
+  const [userId, setUserId] = useState("");
+  const [message, setMessage] = useState("");
 
   const ENCRYPTION_KEY = import.meta.env.VITE_ENCRYPTION_KEY;
   const ALGORITHM = import.meta.env.VITE_ENCRYPTION_ALGORITHM || "aes-256-cbc";
@@ -73,12 +77,42 @@ const VerifyUser = () => {
       toast.error("Cannot capture fingerprint; device not connected.");
     }
   };
+  
 
   const fetchStoredGalleryTemplate = async (rollNumber) => {
     try {
+      const response = await fetch(`http://localhost/api/v1/users/get-student/${rollNumber}`, {
+        method: "GET",
+        headers: {
+          'Content-Type': 'application/json',
+          "Authorization": `Bearer ${globalVariable}` // Ensure globalVariable contains the correct token
+        },
+      });
+      const data1 = await response.json();
+      console.log("user id is : ",data1.data._id);
+      setUserId(data1.data._id);
+      console.log("user id is : ",userId);
+      console.log(globalVariable);
+      console.log("user id is : ",userId);
+      if (response.ok) {
+        setMessage("data fetched Successfully");
+      } else {
+        setMessage(data.message || "Registration failed!");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      setMessage("An error occurred. Please try again later.");
+    };
+    try {
       setIsLoading(true);
       const response = await fetch(
-        `http://localhost/api/v1/users/get-ansiKey/${rollNumber}`
+        `http://localhost/api/v1/users/get-ansiKey/${userId}`, {
+          method: "GET",
+          headers: {
+            'Content-Type': 'application/json',
+            "Authorization": `Bearer ${globalVariable}` // Ensure globalVariable contains the correct token
+          },
+        }
       );
       const result = await response.json();
 

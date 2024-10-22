@@ -1,7 +1,7 @@
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { useState } from "react";
+import { useGlobalContext } from "../GlobalContext.jsx";
 import { CaptureFinger, VerifyFinger } from "../scanner.js";
-import { useGlobalContext } from "../GlobalContext";
 
 function RegisterUser() {
   const [email, setEmail] = useState("");
@@ -28,7 +28,7 @@ function RegisterUser() {
     e.preventDefault();
 
     try {
-      const response = await fetch(`http://localhost/api/users/get-student/${rollnumber}`, {
+      const response = await fetch(`http://localhost/api/v1/users/get-student/${rollnumber}`, {
         method: "GET",
         headers: {
           'Content-Type': 'application/json',
@@ -36,8 +36,9 @@ function RegisterUser() {
         },
       });
       const data1 = await response.json();
-      console.log("user id is : ",data1.body.data._id);
-      setUserId(response.body.data._id);
+      console.log("user id is : ",data1.data._id);
+      setUserId(data1.data._id);
+      console.log(userId);
       console.log(globalVariable);
       if (response.ok) {
         setMessage("data fetched Successfully");
@@ -59,7 +60,7 @@ function RegisterUser() {
         },
         body: JSON.stringify({
           ansiKey : fingerprintKey,
-          ansiImageURL : fingerprintURL,
+          ansiImageUrl : fingerprintURL,
         }),
       });
 
@@ -71,7 +72,7 @@ function RegisterUser() {
         setMessage(data.message || "Registration failed!");
       }
     } catch (error) {
-      console.error("Error:", error);
+      console.error("here Error:", error);
       setMessage("An error occurred. Please try again later.");
     }
   };
