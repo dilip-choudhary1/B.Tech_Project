@@ -14,7 +14,7 @@ function RegisterUser() {
   const [fingerprintImage, setFingerprintImage] = useState(null);
   const [fingerprintURL, setFingerprintURL] = useState(null);
   const [fingerprintKey, setFingerprintKey] = useState("");
-  const { globalVariable, setGlobalVariable} = useGlobalContext();
+  const { globalVariable, setGlobalVariable } = useGlobalContext();
 
   const s3 = new S3Client({
     region: import.meta.env.VITE_AWS_REGION,
@@ -28,15 +28,20 @@ function RegisterUser() {
     e.preventDefault();
 
     try {
-      const response = await fetch(`http://localhost/api/users/get-student/${rollnumber}`, {
-        method: "GET",
-        headers: {
-          'Content-Type': 'application/json',
-          "Authorization": `Bearer ${globalVariable}` // Ensure globalVariable contains the correct token
-        },
-      });
+      const response = await fetch(
+        `http://localhost/api/v1/users/get-student/${rollnumber}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${globalVariable}`, // Ensure globalVariable contains the correct token
+          },
+        }
+      );
+      // console.log(response.json());
       const data1 = await response.json();
-      console.log("user id is : ",data1.body.data._id);
+      console.log(data1);
+      console.log("user id is : ", data1.data._id);
       setUserId(response.body.data._id);
       console.log(globalVariable);
       if (response.ok) {
@@ -47,33 +52,35 @@ function RegisterUser() {
     } catch (error) {
       console.error("Error:", error);
       setMessage("An error occurred. Please try again later.");
-    };
-    
-
-    try {
-      const response = await fetch(`http://localhost/api/v1/users/add-ansiKey/${userId}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${globalVariable}`
-        },
-        body: JSON.stringify({
-          ansiKey : fingerprintKey,
-          ansiImageURL : fingerprintURL,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        setMessage("User registered successfully!");
-      } else {
-        setMessage(data.message || "Registration failed!");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      setMessage("An error occurred. Please try again later.");
     }
+
+    // try {
+    //   const response = await fetch(
+    //     `http://localhost/api/v1/users/add-ansiKey/${userId}`,
+    //     {
+    //       method: "POST",
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //         Authorization: `Bearer ${globalVariable}`,
+    //       },
+    //       body: JSON.stringify({
+    //         ansiKey: fingerprintKey,
+    //         ansiImageURL: fingerprintURL,
+    //       }),
+    //     }
+    //   );
+
+    //   const data = await response.json();
+
+    //   if (response.ok) {
+    //     setMessage("User registered successfully!");
+    //   } else {
+    //     setMessage(data.message || "Registration failed!");
+    //   }
+    // } catch (error) {
+    //   console.error("Error:", error);
+    //   setMessage("An error occurred. Please try again later.");
+    // }
   };
 
   const handleFingerprintCapture = async () => {
@@ -93,10 +100,10 @@ function RegisterUser() {
       if (!response || !response.data) {
         throw new Error("No response data");
       }
-      
+
       const fingerprintImage = response.data.BitmapData;
       const fingerprintKey = response.data.AnsiTemplate;
-      const iso = response.data.IsoTemplate
+      const iso = response.data.IsoTemplate;
 
       const binaryString = window.atob(fingerprintImage);
       const binaryLength = binaryString.length;
@@ -190,7 +197,7 @@ function RegisterUser() {
             required
           />
         </div> */}
-        <div className="form-group">
+        {/*<div className="form-group">
           <label>Fingerprint Registration</label>
           <button type="button" onClick={handleFingerprintCapture}>
             Capture Fingerprint
@@ -201,7 +208,7 @@ function RegisterUser() {
               alt="Fingerprint Image"
             />
           )}
-        </div>
+        </div>*/}
         <button type="submit" className="submit-button">
           Sign Up
         </button>
