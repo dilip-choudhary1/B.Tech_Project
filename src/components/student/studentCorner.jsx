@@ -15,52 +15,10 @@ function StudentCorner() {
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user'));
-
     if (!user) {
       window.location.href = '/sign-in'; // Redirect to SignIn if not logged in
       return;
     }
-
-    const fetchMessChoice = async () => {
-      try {
-        const response = await fetch(`http://localhost/api/v1/users/${user.rollnumber}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            "Authorization": `Bearer ${globalVariable}`
-          },
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-          const userId = data.data.user._id;
-          const messResponse = await fetch(`http://localhost/api/v1/users/${user.rollnumber}`, {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              "Authorization": `Bearer ${globalVariable}`
-            },
-          });
-
-          const messData = await messResponse.json();
-
-          if (messResponse.ok) {
-            setMessChoice(messData.messChoice || '');
-            setSelectedMess(messData.messChoice ? `You have chosen ${messData.messChoice}` : '');
-          } else {
-            setError(messData.message || 'Failed to fetch mess choice');
-          }
-        } else {
-          setError(data.message || 'Failed to fetch user details');
-        }
-      } catch (error) {
-        console.error('Error:', error);
-        setError('An error occurred while fetching user or mess choice');
-      }
-    };
-
-    fetchMessChoice();
   }, []);
   const formatDate = (date) => {
     // Format date as YYYY-MM-DD
@@ -73,17 +31,7 @@ function StudentCorner() {
   const handleMessSelection = async (mess) => {
     setSelectedMess(`You have chosen ${mess}`);
     try {
-      // const user = JSON.parse(localStorage.getItem('user'));
-      // const userResponse = await fetch(`http://localhost/api/v1/users/${user.rollnumber}`, {
-      //   method: 'GET',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     "Authorization": `Bearer ${globalVariable}`
-      //   },
-      // });
-
-      // const userData = await userResponse.json();
-      // const userId = userData.data.user._id;
+      const user = JSON.parse(localStorage.getItem('user'));
       setMessChoice(mess);
       const response = await fetch(`http://localhost/api/v1/mess/choose-mess`, {
         method: 'POST',
@@ -112,15 +60,15 @@ function StudentCorner() {
   };
 
   return (
-    <div className="student-corner" style={{ }}>
+    <div className="student-corner w-screen h-full mt-25 " style={{ }}>
       <h2>Welcome to the Student Corner</h2>
       <h3>Choose your mess</h3>
       <div className="mess-buttons">
         <button onClick={() => setSelectedMess('Old')}>Old</button>
         <button onClick={() => setSelectedMess('New')}>New</button>
       </div>
-      <div className="date-picker">
-        <label>Start Date:</label>
+      <div className="date-picker text-white">
+        <label className="text-white">Start Date:</label>
         <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} />
         <label>End Date:</label>
         <DatePicker selected={endDate} onChange={(date) => setEndDate(date)} />

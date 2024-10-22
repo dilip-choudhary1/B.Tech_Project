@@ -15,7 +15,7 @@ import StudentCorner from './components/student/studentCorner';
 function App() {
   return (
     <>
-      <Navbar />
+      {/* <Navbar /> */}
       <div className="content">
         <Routes>
           <Route path="/" element={<Home />} />

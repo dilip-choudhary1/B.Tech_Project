@@ -1,6 +1,6 @@
 
 import CryptoJS from "crypto-js";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -16,7 +16,6 @@ const VerifyUser = () => {
   const [ansiTemplate, setAnsiTemplate] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const { globalVariable, setGlobalVariable} = useGlobalContext();
-  const [userId, setUserId] = useState("");
   const [message, setMessage] = useState("");
 
   const ENCRYPTION_KEY = import.meta.env.VITE_ENCRYPTION_KEY;
@@ -69,17 +68,21 @@ const VerifyUser = () => {
         setAnsiTemplate(AnsiTemplate);
         setFingerprintCaptured(true);
         toast.success("Fingerprint captured successfully!");
+        return true;
       } else {
         console.error("Capture failed:", response.err);
         toast.error("Fingerprint capture failed.");
+        return false;
       }
+      return false;
     } else {
       toast.error("Cannot capture fingerprint; device not connected.");
+      return false;
     }
   };
   
 
-  const fetchStoredGalleryTemplate = async (rollNumber) => {
+  const fetchUserId=async(rollNumber)=>{
     try {
       const response = await fetch(`http://localhost/api/v1/users/get-student/${rollNumber}`, {
         method: "GET",
@@ -89,24 +92,35 @@ const VerifyUser = () => {
         },
       });
       const data1 = await response.json();
-      console.log("user id is : ",data1.data._id);
-      setUserId(data1.data._id);
-      console.log("user id is : ",userId);
-      console.log(globalVariable);
-      console.log("user id is : ",userId);
+      console.log("response of get : ",data1);
       if (response.ok) {
+        console.log("user id is : ",data1.data._id);
+        console.log(globalVariable);
+        // setUserId(userId);
         setMessage("data fetched Successfully");
+        return data1.data._id;
       } else {
         setMessage(data.message || "Registration failed!");
+        return null;
       }
     } catch (error) {
       console.error("Error:", error);
       setMessage("An error occurred. Please try again later.");
+      return null;
     };
+  };
+
+  // useEffect(() => {
+  //   if (userId) {
+  //     console.log("user id is :", userId);  // Logs the updated userId when it changes
+  //   }
+  // }, [userId]);
+  const fetchStoredGalleryTemplate = async (userid) => {
+    console.log("user id is in get ansikey : ",userid);
     try {
       setIsLoading(true);
       const response = await fetch(
-        `http://localhost/api/v1/users/get-ansiKey/${userId}`, {
+        `http://localhost/api/v1/users/get-ansiKey/${userid}`, {
           method: "GET",
           headers: {
             'Content-Type': 'application/json',
@@ -140,8 +154,10 @@ const VerifyUser = () => {
     }
 
     try {
+      const userid = await fetchUserId(rollnumber);
+      console.log(" user id in variable: ", userid);
       const storedGalleryTemplate = await fetchStoredGalleryTemplate(
-        rollnumber
+        userid
       );
       if (storedGalleryTemplate) {
         console.log("Captured Template (ProbFMR):", ansiTemplate);
@@ -170,22 +186,48 @@ const VerifyUser = () => {
     }
   };
 
+  const handleFingerprintProcess = async () => {
+    setIsLoading(true);
+    
+    const isCapture = await captureFinger();
+    
+    if (isCapture) {
+      await verifyFingerprint();
+    } else {
+      console.log("Fingerprint capture failed. Cannot proceed to verification.");
+    }
+    
+    setIsLoading(false); 
+  };
+{/* <ToastContainer /> */}
   return (
-    <div className="VerifyUser">
+    <div className="VerifyUser  mt-10 flex flex-col items-center bg-white shadow-lg rounded-lg p-6">
       <ToastContainer />
-      <h2>Verify User Fingerprint</h2>
+      <h2 className="text-2xl font-semibold text-gray-800 mb-4">Verify User Fingerprint</h2>
 
       <input
         type="text"
         placeholder="Roll Number"
         value={rollnumber}
         onChange={(e) => setRollnumber(e.target.value)}
+        className="border border-gray-300 rounded-md p-2 mb-4 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
 
-      <button onClick={captureFinger}>Capture Fingerprint</button>
+      <button
+        onClick={captureFinger}
+        className={`bg-blue-500 text-white rounded-md py-2 px-4 transition duration-300 ease-in-out 
+                    hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400`}
+      >
+        {isLoading ? "Verifying..." : "Capture Fingerprint"}
+      </button>
 
       {fingerprintCaptured && (
-        <button onClick={verifyFingerprint} disabled={isLoading}>
+        <button
+          onClick={verifyFingerprint}
+          disabled={isLoading}
+          className={`mt-4 bg-green-500 text-white rounded-md py-2 px-4 transition duration-300 ease-in-out 
+                      hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+        >
           {isLoading ? "Verifying..." : "Verify Fingerprint"}
         </button>
       )}

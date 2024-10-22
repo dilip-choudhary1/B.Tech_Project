@@ -51,7 +51,7 @@ function SignIn1() {
   
 
   return (
-    <div className="sign-in-page">
+    <div className="sign-in-page w-screen h-full mt-10">
       <h2>Sign In Page</h2>
       <form className="sign-in-form" onSubmit={handleSubmit}>
         <div className="form-group">

@@ -108,6 +108,7 @@ function SignUp() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
   const [fingerprintImage, setFingerprintImage] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [fingerprintURL, setFingerprintURL] = useState(null);
   const [fingerprintKey, setFingerprintKey] = useState("");
 
@@ -120,6 +121,7 @@ function SignUp() {
   });
 
   const handleSubmit = async (e) => {
+    setIsLoading(true)
     e.preventDefault();
 
     if (password !== confirmPassword) {
@@ -220,9 +222,9 @@ function SignUp() {
   };
 
   return (
-    <div className="sign-up-page">
+    <div className="sign-up-page w-screen h-full mt-10">
       <h2>Sign Up</h2>
-      <form className="sign-up-form" onSubmit={handleSubmit}>
+      <form className="sign-up-form w-full h-full" onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="email">IITJ Email</label>
           <input
@@ -280,7 +282,7 @@ function SignUp() {
           )}
         </div> */}
         <button type="submit" className="submit-button">
-          Sign Up
+        {isLoading ?" Loading... ":" Sign Up "}
         </button>
       </form>
       {message && <p>{message}</p>}

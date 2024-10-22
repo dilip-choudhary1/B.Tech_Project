@@ -45,7 +45,7 @@ function SignIn() {
   
 
   return (
-    <div className="sign-in-page">
+    <div className="sign-in-page w-screen h-full mt-10">
       <h2>Sign In Page</h2>
       <form className="sign-in-form" onSubmit={handleSubmit}>
         <div className="form-group">
@@ -59,8 +59,8 @@ function SignIn() {
             required
           />
         </div>
-        <div className="form-group">
-          <label htmlFor="password">Password</label>
+        <div className="form-group text-white">
+          <label htmlFor="password text-white">Password</label>
           <input
             type="password"
             id="password"

@@ -23,10 +23,7 @@ function RegisterUser() {
       secretAccessKey: import.meta.env.VITE_AWS_SECRET_ACCESS_KEY,
     },
   });
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
+  const fetchUserID = async()=>{
     try {
       const response = await fetch(`http://localhost/api/v1/users/get-student/${rollnumber}`, {
         method: "GET",
@@ -42,17 +39,23 @@ function RegisterUser() {
       console.log(globalVariable);
       if (response.ok) {
         setMessage("data fetched Successfully");
+        return data1.data._id;
       } else {
         setMessage(data.message || "Registration failed!");
+        return null;
       }
     } catch (error) {
       console.error("Error:", error);
       setMessage("An error occurred. Please try again later.");
+      return null;
     };
-    
+  }
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const userIID = await fetchUserID();
     try {
-      const response = await fetch(`http://localhost/api/v1/users/add-ansiKey/${userId}`, {
+      const response = await fetch(`http://localhost/api/v1/users/add-ansiKey/${userIID}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -137,7 +140,7 @@ function RegisterUser() {
   };
 
   return (
-    <div className="sign-up-page">
+    <div className="sign-up-page w-screen h-full mt-10">
       <h2>Sign Up</h2>
       <form className="sign-up-form" onSubmit={handleSubmit}>
         {/* <div className="form-group">
