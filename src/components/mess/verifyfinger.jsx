@@ -12,6 +12,7 @@ const VerifyUser = () => {
   const [rollnumber, setRollnumber] = useState(
     location.state?.rollnumber || ""
   );
+  const [chooseMess, setChooseMess] = useState("");
   const [fingerprintCaptured, setFingerprintCaptured] = useState(false);
   const [ansiTemplate, setAnsiTemplate] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -135,17 +136,52 @@ const VerifyUser = () => {
       if (response.status === 200 && result.data.fingerprintKey) {
         const decryptedKey = decrypt(result.data.fingerprintKey);
         console.log("Decrypted key (hex):", decryptedKey);
+        setIsLoading(false);
         return decryptedKey;
       } else {
         throw new Error(result.message || "Failed to fetch stored fingerprint");
+        setIsLoading(false);
       }
     } catch (error) {
       toast.error("Error fetching fingerprint data: " + error.message);
+      setIsLoading(false);
       return null;
     } finally {
       setIsLoading(false);
     }
   };
+  const entryMess = async()=>{
+    try {
+      const response = await fetch("http://localhost/api/v1/mess/entry-mess", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${globalVariable}`
+        },
+        body: JSON.stringify({ rollNumber: rollnumber, mess :chooseMess}),
+      });
+
+      const res = await response.json();
+      console.log(globalVariable);
+      console.log("api responce : ",res);
+      // setGlobalVariable(res.data.authToken);
+      console.log("set global responce : ",globalVariable);
+
+      if (response.ok) {
+        console.log( " User can enter in the mess");
+        
+        toast.success("User can enter in the mess");
+        // Redirect to StudentCorner
+      } 
+      else {
+        setMessage(res.message || "Login failed!");
+        toast.error("User Not allowed in this mess.",res.message );
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      setMessage("An error occurred. Please try again later.");
+    }
+  }
 
   const verifyFingerprint = async () => {
     if (!fingerprintCaptured || !ansiTemplate || !rollnumber) {
@@ -204,7 +240,14 @@ const VerifyUser = () => {
     <div className="VerifyUser  mt-10 flex flex-col items-center bg-white shadow-lg rounded-lg p-6">
       <ToastContainer />
       <h2 className="text-2xl font-semibold text-gray-800 mb-4">Verify User Fingerprint</h2>
-
+      <div class="form-group">
+          <label htmlFor="role">Mess</label>
+          <select name="Choose Mess" value ={chooseMess} id="chooseMess" onChange={(e)=>setChooseMess(e.target.value)}>
+            <option value=""> Select Mess</option>
+            <option value="Old">Old</option>
+            <option value="New">New</option>
+          </select>
+        </div>
       <input
         type="text"
         placeholder="Roll Number"
@@ -231,6 +274,13 @@ const VerifyUser = () => {
           {isLoading ? "Verifying..." : "Verify Fingerprint"}
         </button>
       )}
+      <button
+        onClick={entryMess}
+        className={`bg-blue-500 text-white mt-5 rounded-md py-2 px-4 transition duration-300 ease-in-out 
+                    hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400`}
+      >
+        {isLoading ? "Verifying..." : "Enter to Mess"}
+      </button>
     </div>
   );
 };

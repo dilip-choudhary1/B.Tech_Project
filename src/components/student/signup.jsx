@@ -1,104 +1,8 @@
-// import { useState } from 'react';
-
-// function SignUp() {
-//   const [email, setEmail] = useState('');
-//   const [rollnumber, setRollNumber] = useState('');
-//   const [password, setPassword] = useState('');
-//   const [confirmPassword, setConfirmPassword] = useState('');
-//   const [message, setMessage] = useState('');
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-
-//     if (password !== confirmPassword) {
-//       setMessage('Passwords do not match!');
-//       return;
-//     }
-
-//     try {
-//       const response = await fetch('http://localhost/api/v1/users', {
-//         method: 'POST',
-//         headers: {
-//           'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify({ email, rollnumber, password }),
-//       });
-
-//       const data = await response.json();
-
-//       if (response.ok) {
-//         setMessage('User registered successfully!');
-//       } else {
-//         setMessage(data.message || 'Registration failed!');
-//       }
-//     } catch (error) {
-//       console.error('Error:', error);
-//       setMessage('An error occurred. Please try again later.');
-//     }
-//   };
-
-//   return (
-//     <div className="sign-up-page" style={{alignContent:'center', justifyContent:'center', marginLeft:'33rem'}}>
-//       <h2>Sign Up</h2>
-//       <form className="sign-up-form" onSubmit={handleSubmit}>
-//         <div className="form-group">
-//           <label htmlFor="email">IITJ Email</label>
-//           <input
-//             type="text"
-//             id="email"
-//             name="email"
-//             value={email}
-//             onChange={(e) => setEmail(e.target.value)}
-//             required
-//           />
-//         </div>
-//         <div className="form-group">
-//           <label htmlFor="rollNumber">Roll Number</label>
-//           <input
-//             type="text"
-//             id="rollNumber"
-//             name="rollNumber"
-//             value={rollnumber}
-//             onChange={(e) => setRollNumber(e.target.value)}
-//             required
-//           />
-//         </div>
-//         <div className="form-group">
-//           <label htmlFor="password">Password</label>
-//           <input
-//             type="password"
-//             id="password"
-//             name="password"
-//             value={password}
-//             onChange={(e) => setPassword(e.target.value)}
-//             required
-//           />
-//         </div>
-//         <div className="form-group">
-//           <label htmlFor="confirmPassword">Confirm Password</label>
-//           <input
-//             type="password"
-//             id="confirmPassword"
-//             name="confirmPassword"
-//             value={confirmPassword}
-//             onChange={(e) => setConfirmPassword(e.target.value)}
-//             required
-//           />
-//         </div>
-//         <button type="submit" className="submit-button">Sign Up</button>
-//       </form>
-//       {message && <p>{message}</p>}
-//     </div>
-//   );
-// }
-
-
-
-// export default SignUp;
-
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { useState } from "react";
 import { CaptureFinger, VerifyFinger } from "../scanner.js";
+import { useNavigate } from "react-router-dom";
+import SignIn from "./signin.jsx";
 
 function SignUp() {
   const [email, setEmail] = useState("");
@@ -111,6 +15,7 @@ function SignUp() {
   const [isLoading, setIsLoading] = useState(false);
   const [fingerprintURL, setFingerprintURL] = useState(null);
   const [fingerprintKey, setFingerprintKey] = useState("");
+  const navigate = useNavigate();
 
   const s3 = new S3Client({
     region: import.meta.env.VITE_AWS_REGION,
@@ -152,7 +57,9 @@ function SignUp() {
       console.log(response);
 
       if (response.ok) {
+        setIsLoading(false);
         setMessage("User registered successfully!");
+        navigate("/sign-in");
       } else {
         setMessage(data.message || "Registration failed!");
       }
@@ -215,6 +122,7 @@ function SignUp() {
         "Fingerprint image uploaded successfully. Image URL:",
         imageUrl
       );
+      
     } catch (error) {
       console.error("Error during fingerprint capture:", error);
       setMessage("Fingerprint capture failed!");
@@ -222,12 +130,13 @@ function SignUp() {
   };
 
   return (
-    <div className="sign-up-page w-screen h-full mt-10">
-      <h2>Sign Up</h2>
-      <form className="sign-up-form w-full h-full" onSubmit={handleSubmit}>
+    <div className="sign-up-page w-screen h-full mt-10 items-center justify-center">
+      <p className="text-w-10 font-bold text-3xl item-center align-center">Sign Up</p>
+      <form className="sign-up-form w-full h-full mt-5" onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="email">IITJ Email</label>
           <input
+            className="h-10"
             type="text"
             id="email"
             name="email"
@@ -239,6 +148,7 @@ function SignUp() {
         <div className="form-group">
           <label htmlFor="rollNumber">Roll Number</label>
           <input
+            className="h-10"
             type="text"
             id="rollNumber"
             name="rollNumber"
@@ -250,6 +160,7 @@ function SignUp() {
         <div className="form-group">
           <label htmlFor="password">Password</label>
           <input
+            className="h-10"
             type="password"
             id="password"
             name="password"
@@ -261,6 +172,7 @@ function SignUp() {
         <div className="form-group">
           <label htmlFor="confirmPassword">Confirm Password</label>
           <input
+            className="h-10"
             type="password"
             id="confirmPassword"
             name="confirmPassword"
@@ -281,10 +193,15 @@ function SignUp() {
             />
           )}
         </div> */}
-        <button type="submit" className="submit-button">
+        <button type="submit" className="submit-button mb-5">
         {isLoading ?" Loading... ":" Sign Up "}
         </button>
+        
       </form>
+      <h2>If Already Registered Sign In </h2>
+      <button type="signin" className="submit-button w-full" onClick={() => navigate("/sign-in")}>
+      {" Sign In "}
+      </button>
       {message && <p>{message}</p>}
     </div>
   );
