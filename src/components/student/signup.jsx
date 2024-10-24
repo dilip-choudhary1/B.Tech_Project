@@ -3,8 +3,10 @@ import { useState } from "react";
 import { CaptureFinger, VerifyFinger } from "../scanner.js";
 import { useNavigate } from "react-router-dom";
 import SignIn from "./signin.jsx";
+import { useGlobalContext } from '../GlobalContext';
 
 function SignUp() {
+  const { globalVariable, setGlobalVariable} = useGlobalContext();
   const [email, setEmail] = useState("");
   // const [role, setRole] = useState("");
   const [rollnumber, setRollNumber] = useState("");
@@ -57,15 +59,21 @@ function SignUp() {
       console.log(response);
 
       if (response.ok) {
+
+        setGlobalVariable(data.data.authToken);
+
         setIsLoading(false);
         setMessage("User registered successfully!");
-        navigate("/sign-in");
+        // navigate("/sign-in");
+        navigate("/student-corner");
       } else {
         setMessage(data.message || "Registration failed!");
+        setIsLoading(false);
       }
     } catch (error) {
       console.error("Error:", error);
       setMessage("An error occurred. Please try again later.");
+      setIsLoading(false);
     }
   };
 

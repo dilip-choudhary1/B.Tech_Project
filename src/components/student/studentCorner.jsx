@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useGlobalContext } from "../GlobalContext";
+import {jwtDecode} from "jwt-decode";
 import './studentcorner.css';
 
 function StudentCorner() {
@@ -13,13 +14,32 @@ function StudentCorner() {
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
 
+  // useEffect(() => {
+  //   const user = JSON.parse(localStorage.getItem('user'));
+  //   if (!user) {
+  //     window.location.href = '/sign-in'; // Redirect to SignIn if not logged in
+  //     return;
+  //   }
+  // }, []);
+
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem('user'));
-    if (!user) {
+    if (!globalVariable) {
       window.location.href = '/sign-in'; // Redirect to SignIn if not logged in
       return;
     }
-  }, []);
+
+    // Decode token to check expiration
+    const decodedToken = jwtDecode(globalVariable);
+    const currentTime = Date.now() / 1000; // Current time in seconds
+
+    if (decodedToken.exp < currentTime) {
+      // Token is expired
+      localStorage.removeItem('globalVariable');
+      setGlobalVariable(''); 
+      window.location.href = '/sign-in';
+    }
+  }, [globalVariable, setGlobalVariable]);
+
   const formatDate = (date) => {
     // Format date as YYYY-MM-DD
     const year = date.getFullYear();
