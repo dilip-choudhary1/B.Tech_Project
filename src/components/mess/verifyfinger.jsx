@@ -72,6 +72,13 @@
       setIsLoading(true);
       
       try {
+
+        let cleanedRollHash = rollHash;
+        if(rollHash.startsWith("RollHash:")){
+          cleanedRollHash = rollHash.replace(/^RollHash:/, "");
+        }
+
+        console.log("cleanedRollHash: ", cleanedRollHash);
         const response = await fetch("http://localhost/api/v1/mess/entry-mess-qr", {
           method: "POST",
           headers: {
@@ -79,7 +86,7 @@
             "Authorization": `Bearer ${globalVariable}`, // Make sure globalVariable contains the valid token
           },
           body: JSON.stringify({
-            rollHash,
+            rollHash: cleanedRollHash,
             mess: chooseMess,
           }),
         });
@@ -88,7 +95,10 @@
     
         if (!response.ok) {
           // Handle specific error codes with custom messages
+          console.log("response status: ", response.status);
+          console.log("response data: ", data.message);
           switch (response.status) {
+
             case 400:
               toast.error(data.message || "Bad request. Please check the input data.");
               break;
