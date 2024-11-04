@@ -307,14 +307,17 @@ const VerifyUser = () => {
 
           if (!response.ok) {
             setMessage(res.message || "Login failed!");
-            toast.error("User Not allowed in this mess.", res.message);
+            // toast.error("User Not allowed in this mess.", res.message);
+            toast.error(res.message);
+            setRollnumber("");
             return false;
           }
 
-          toast.success("User can enter in the mess");
+          toast.success("You can take this meal! Thanks for coming");
+          setRollnumber("");
           return true;
         } catch (error) {
-          console.error("Error:", error);
+          // console.error("Error:", error);
           setMessage("An error occurred. Please try again later.");
           return false;
         }
@@ -328,7 +331,9 @@ const VerifyUser = () => {
         capturedTemplate,
         rollnumber
       );
-      if (!isVerified) return false;
+      if (!isVerified) {
+        return false;
+      }
 
       return await processMessEntry(rollnumber, globalVariable);
     } catch (error) {
