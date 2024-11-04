@@ -14,7 +14,7 @@ function SignIn() {
 
     try {
       const role = "students"
-      const response = await fetch("http://localhost/api/v1/users/login", {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/users/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

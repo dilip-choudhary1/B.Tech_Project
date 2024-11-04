@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useGlobalContext } from "../GlobalContext.jsx";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import dotenv from "dotenv";
 
 function OverallStudents() {
   const { globalVariable } = useGlobalContext();
@@ -13,8 +14,9 @@ function OverallStudents() {
   useEffect(() => {
     const fetchMessCount = async () => {
       try {
+        
         const oldResponse = await fetch(
-          "http://localhost/api/v1/mess/get-mess-data/Old",
+          `${import.meta.env.VITE_BACKEND_URL}/mess/get-mess-data/Old`,
           {
             method: "GET",
             headers: {
@@ -35,7 +37,7 @@ function OverallStudents() {
         }
 
         const newResponse = await fetch(
-          "http://localhost/api/v1/mess/get-mess-data/New",
+          `${import.meta.env.VITE_BACKEND_URL}/mess/get-mess-data/New`,
           {
             method: "GET",
             headers: {

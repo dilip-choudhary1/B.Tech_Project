@@ -12,6 +12,7 @@ const VerifyUser = () => {
   const [selectedOption, setSelectedOption] = useState("qrCode"); // 'qrCode' or 'fingerprint'
   const [rollHash, setRollHash] = useState("");
   const inputRef = useRef(null);
+  const debounceTimeout = useRef(null);
 
   const [rollnumber, setRollnumber] = useState(
     location.state?.rollnumber || ""
@@ -34,8 +35,8 @@ const VerifyUser = () => {
 
   const handleOptionChange = (option) => setSelectedOption(option);
 
-  const enterWithQrCode = async () => {
-    if (!rollHash) {
+  const enterWithQrCode = async (completeRollHash) => {
+    if (!completeRollHash) {
       toast.error("Please provide roll hash");
       return;
     }
@@ -43,14 +44,13 @@ const VerifyUser = () => {
     setIsLoading(true);
 
     try {
-      let cleanedRollHash = rollHash;
-      if (rollHash.startsWith("RollHash:")) {
-        cleanedRollHash = rollHash.replace(/^RollHash:/, "");
-      }
+      let cleanedRollHash = completeRollHash.startsWith("RollHash:")
+        ? completeRollHash.replace(/^RollHash:/, "")
+        : completeRollHash;
 
       console.log("cleanedRollHash: ", cleanedRollHash);
       const response = await fetch(
-        "http://localhost/api/v1/mess/entry-mess-qr",
+        `${import.meta.env.VITE_BACKEND_URL}/mess/entry-mess-qr`,
         {
           method: "POST",
           headers: {
@@ -95,6 +95,8 @@ const VerifyUser = () => {
       toast.error("Network error. Please check your connection and try again.");
     } finally {
       setIsLoading(false);
+      setRollHash("");
+      inputRef.current.focus();
     }
   };
 
@@ -160,7 +162,7 @@ const VerifyUser = () => {
   const fetchUserId = async (rollNumber) => {
     try {
       const response = await fetch(
-        `http://localhost/api/v1/users/get-student/${rollNumber}`,
+        `${import.meta.env.VITE_BACKEND_URL}/users/get-student/${rollNumber}`,
         {
           method: "GET",
           headers: {
@@ -198,7 +200,7 @@ const VerifyUser = () => {
     try {
       setIsLoading(true);
       const response = await fetch(
-        `http://localhost/api/v1/users/get-ansiKey/${userid}`,
+        `${import.meta.env.VITE_BACKEND_URL}/users/get-ansiKey/${userid}`,
         {
           method: "GET",
           headers: {
@@ -230,7 +232,7 @@ const VerifyUser = () => {
   };
   const entryMess = async () => {
     try {
-      const response = await fetch("http://localhost/api/v1/mess/entry-mess", {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/mess/entry-mess`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -315,6 +317,23 @@ const VerifyUser = () => {
   {
     /* <ToastContainer /> */
   }
+
+  const handleRollHashChange = (e) => {
+    const currentValue = e.target.value;
+    setRollHash(currentValue);
+
+    if (debounceTimeout.current) {
+      clearTimeout(debounceTimeout.current);
+    }
+
+    
+
+    debounceTimeout.current = setTimeout(() => {
+      enterWithQrCode(currentValue);
+    }, 300);
+    
+    
+  };
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="VerifyUser w-1/3 mt-10 flex flex-col items-center bg-white shadow-lg rounded-lg p-6">
@@ -354,7 +373,7 @@ const VerifyUser = () => {
               type="text"
               placeholder="Roll Number (Hash)"
               value={rollHash}
-              onChange={(e) => setRollHash(e.target.value)}
+              onChange={handleRollHashChange}
               ref={inputRef}
               className="border border-gray-300 rounded-md p-2 mb-4 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
             />

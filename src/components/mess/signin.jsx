@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../GlobalContext";
 // import './signup.css';
 // import './../../App.css';
+import dotenv from "dotenv";
 
 function SignIn1() {
   const { globalVariable, setGlobalVariable } = useGlobalContext();
@@ -17,7 +18,7 @@ function SignIn1() {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost/api/v1/users/login", {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/users/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

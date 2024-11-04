@@ -46,7 +46,7 @@ function SignUp() {
     };
     console.log(dataToSend);
     try {
-      const response = await fetch("http://localhost/api/v1/users", {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/users`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

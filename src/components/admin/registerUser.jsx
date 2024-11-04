@@ -29,7 +29,7 @@ function RegisterUser() {
   const fetchUserID = async () => {
     try {
       const response = await fetch(
-        `http://localhost/api/v1/users/get-student/${rollnumber}`,
+        `${import.meta.env.VITE_BACKEND_URL}/users/get-student/${rollnumber}`,
         {
           method: "GET",
           headers: {
@@ -62,7 +62,7 @@ function RegisterUser() {
     const userIID = await fetchUserID();
     try {
       const response = await fetch(
-        `http://localhost/api/v1/users/add-ansiKey/${userIID}`,
+        `${import.meta.env.VITE_BACKEND_URL}/users/add-ansiKey/${userIID}`,
         {
           method: "POST",
           headers: {
@@ -90,7 +90,7 @@ function RegisterUser() {
 
     // try {
     //   const response = await fetch(
-    //     `http://localhost/api/v1/users/add-ansiKey/${userId}`,
+    //     `${import.meta.env.VITE_BACKEND_URL}/users/add-ansiKey/${userId}`,
     //     {
     //       method: "POST",
     //       headers: {
@@ -183,7 +183,7 @@ function RegisterUser() {
     const fetchMessCount = async () => {
       try {
         const response = await fetch(
-          "http://localhost/api/v1/mess/get-mess-data/Old",
+          `${import.meta.env.VITE_BACKEND_URL}/mess/get-mess-data/Old`,
           {
             method: "GET",
             headers: {
@@ -207,7 +207,7 @@ function RegisterUser() {
         }
 
         const response1 = await fetch(
-          "http://localhost/api/v1/mess/get-mess-data/New",
+          `${import.meta.env.VITE_BACKEND_URL}/mess/get-mess-data/New`,
           {
             method: "GET",
             headers: {
