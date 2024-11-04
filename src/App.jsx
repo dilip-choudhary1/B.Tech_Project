@@ -1,20 +1,21 @@
-import React from 'react';
-import { Route, Routes, Navigate } from 'react-router-dom';
-import './App.css';
-import AdminCorner from './components/admin/adminCorner';
-import MessCorner from './components/mess/messCorner';
-import RegisterUser from './components/admin/registerUser';
-import ManageStudents from './components/admin/manageStudents';
-import Home from './components/home';
-import SignInAdmin from './components/mess/signin';
-import VerifyUser from './components/mess/verifyfinger';
-import MessOverAllStudents from './components/mess/messOverAllStudents';
-import Navbar from './components/navbar';
-import SignInStudent from './components/student/signin';
-import SignUp from './components/student/signup';
-import StudentCorner from './components/student/studentCorner';
-import StudentDashboard from './components/student/studentDashboard';
-import StudentPreviousData from './components/student/previousData';
+import React from "react";
+import { Route, Routes, Navigate } from "react-router-dom";
+import "./App.css";
+import AdminCorner from "./components/admin/adminCorner";
+import MessCorner from "./components/mess/messCorner";
+import RegisterUser from "./components/admin/registerUser";
+import ManageStudents from "./components/admin/manageStudents";
+import Home from "./components/home";
+import SignInAdmin from "./components/mess/signin";
+import VerifyUser from "./components/mess/verifyfinger";
+import MessOverAllStudents from "./components/mess/messOverAllStudents";
+import Navbar from "./components/navbar";
+import SignInStudent from "./components/student/signin";
+import SignUp from "./components/student/signup";
+import StudentCorner from "./components/student/studentCorner";
+import StudentDashboard from "./components/student/studentDashboard";
+import StudentPreviousData from "./components/student/previousData";
+import SelectedMessdata from "./components/student/selectedMess";
 // import MessCorner from './components/mess/messCorner';
 
 // Helper Component to Protect Routes
@@ -45,33 +46,41 @@ function App() {
           <Route path="/sign-in-admin" element={<SignInAdmin />} />
 
           {/* Student Routes */}
-          <Route path="/student" element={
-            <ProtectedRoute role="student">
-              <StudentDashboard />
-            </ProtectedRoute>
-
-          }>
+          <Route
+            path="/student"
+            element={
+              <ProtectedRoute role="student">
+                <StudentDashboard />
+              </ProtectedRoute>
+            }
+          >
             <Route path="select-mess" element={<StudentCorner />} />
             <Route path="previous-data" element={<StudentPreviousData />} />
+            <Route path="selected-mess-data" element={<SelectedMessdata />} />
           </Route>
 
           {/* Admin Routes */}
-          <Route path="/admin" element={
-            <ProtectedRoute role="admin">
-              <AdminCorner />
-            </ProtectedRoute>
-          }>
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute role="admin">
+                <AdminCorner />
+              </ProtectedRoute>
+            }
+          >
             <Route path="register" element={<RegisterUser />} />
             <Route path="manage-students/*" element={<ManageStudents />} />
           </Route>
 
-
           {/* Mess Routes */}
-          <Route path="/mess" element={
-            <ProtectedRoute role="mess">
-              <MessCorner />
-            </ProtectedRoute>
-          }>
+          <Route
+            path="/mess"
+            element={
+              <ProtectedRoute role="mess">
+                <MessCorner />
+              </ProtectedRoute>
+            }
+          >
             <Route path="mess-entry" element={<VerifyUser />} />
             <Route path="mess-overall" element={<MessOverAllStudents />} />
           </Route>

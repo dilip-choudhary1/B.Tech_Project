@@ -35,6 +35,12 @@ const NavbarStudent = () => {
             >
               Previous Data
             </Link>
+            <Link
+              to="/student/selected-mess-data"
+              className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded"
+            >
+              Selected Mess
+            </Link>
           </>
         </div>
         <div className="flex items-center space-x-4">
