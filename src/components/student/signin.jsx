@@ -30,7 +30,7 @@ function SignIn() {
 
       if (response.ok) {
         localStorage.setItem("user", JSON.stringify({ rollnumber })); // Save user details in local storage
-        navigate("/student-corner"); // Redirect to StudentCorner
+        navigate("/student"); // Redirect to StudentCorner
       } else {
         setMessage(res.message || "Login failed!");
       }

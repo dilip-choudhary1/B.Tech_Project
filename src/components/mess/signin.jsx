@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useGlobalContext } from '../GlobalContext';
+import { useGlobalContext } from "../GlobalContext";
+// import './signup.css';
+// import './../../App.css';
 
 function SignIn1() {
-  const { globalVariable, setGlobalVariable} = useGlobalContext();
+  const { globalVariable, setGlobalVariable } = useGlobalContext();
   const [rollnumber, setRollNumber] = useState("");
   const [role, setRole] = useState("");
-  const [email, setEmail]= useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
@@ -20,22 +22,23 @@ function SignIn1() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ role, password, email}),
+        body: JSON.stringify({ role, password, email }),
       });
+
+      console.log("Printing the login", response);
 
       const res = await response.json();
       console.log(globalVariable);
-      console.log("api responce : ",res.data.authToken);
+      console.log("api responce : ", res.data.authToken);
       setGlobalVariable(res.data.authToken);
-      console.log("set global responce : ",globalVariable);
+      console.log("set global responce : ", globalVariable);
 
       if (response.ok && (role=='admin')) {
         localStorage.setItem("user", JSON.stringify({ rollnumber })); // Save user details in local storage
-        navigate("/register"); // Redirect to StudentCorner
-      } 
-      else if (response.ok && role=='mess') {
+        navigate("/admin"); // Redirect to StudentCorner
+      } else if (response.ok && role == "mess") {
         localStorage.setItem("user", JSON.stringify({ rollnumber })); // Save user details in local storage
-        navigate("/verify"); // Redirect to StudentCorner
+        navigate("/mess"); // Redirect to StudentCorner
       } 
       else {
         setMessage(res.message || "Login failed!");
@@ -46,9 +49,11 @@ function SignIn1() {
     }
   };
   useEffect(() => {
-    console.log('localStorage globalVariable:', localStorage.getItem('globalVariable'));
+    console.log(
+      "localStorage globalVariable:",
+      localStorage.getItem("globalVariable")
+    );
   }, [globalVariable]);
-  
 
   return (
     <div className="sign-in-page w-screen h-full mt-10">
@@ -67,7 +72,12 @@ function SignIn1() {
         </div>
         <div class="form-group">
           <label htmlFor="role">Role</label>
-          <select name="role" value ={role} id="role" onChange={(e)=>setRole(e.target.value)}>
+          <select
+            name="role"
+            value={role}
+            id="role"
+            onChange={(e) => setRole(e.target.value)}
+          >
             <option value=""> Select Role</option>
             <option value="admin">Admin</option>
             <option value="mess">Mess</option>

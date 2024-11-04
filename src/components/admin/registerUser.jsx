@@ -14,11 +14,10 @@ function RegisterUser() {
   const [fingerprintImage, setFingerprintImage] = useState(null);
   const [fingerprintURL, setFingerprintURL] = useState(null);
   const [fingerprintKey, setFingerprintKey] = useState("");
-  const { globalVariable, setGlobalVariable} = useGlobalContext();
+  const { globalVariable, setGlobalVariable } = useGlobalContext();
   const [oldMessCount, setOldMessCount] = useState([]);
   const [newMessCount, setNewMessCount] = useState([]);
   const [error, setError] = useState(null);
-
 
   const s3 = new S3Client({
     region: import.meta.env.VITE_AWS_REGION,
@@ -27,17 +26,20 @@ function RegisterUser() {
       secretAccessKey: import.meta.env.VITE_AWS_SECRET_ACCESS_KEY,
     },
   });
-  const fetchUserID = async()=>{
+  const fetchUserID = async () => {
     try {
-      const response = await fetch(`http://localhost/api/v1/users/get-student/${rollnumber}`, {
-        method: "GET",
-        headers: {
-          'Content-Type': 'application/json',
-          "Authorization": `Bearer ${globalVariable}` // Ensure globalVariable contains the correct token
-        },
-      });
+      const response = await fetch(
+        `http://localhost/api/v1/users/get-student/${rollnumber}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${globalVariable}`,
+          },
+        }
+      );
       const data1 = await response.json();
-      console.log("user id is : ",data1.data._id);
+      console.log("user id is : ", data1.data._id);
       setUserId(data1.data._id);
       console.log(userId);
       console.log(globalVariable);
@@ -52,24 +54,27 @@ function RegisterUser() {
       console.error("Error:", error);
       setMessage("An error occurred. Please try again later.");
       return null;
-    };
-  }
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const userIID = await fetchUserID();
     try {
-      const response = await fetch(`http://localhost/api/v1/users/add-ansiKey/${userIID}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${globalVariable}`
-        },
-        body: JSON.stringify({
-          ansiKey : fingerprintKey,
-          ansiImageUrl : fingerprintURL,
-        }),
-      });
+      const response = await fetch(
+        `http://localhost/api/v1/users/add-ansiKey/${userIID}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${globalVariable}`,
+          },
+          body: JSON.stringify({
+            ansiKey: fingerprintKey,
+            ansiImageUrl: fingerprintURL,
+          }),
+        }
+      );
 
       const data = await response.json();
 
@@ -82,9 +87,41 @@ function RegisterUser() {
       console.error("here Error:", error);
       setMessage("An error occurred. Please try again later.");
     }
+
+    // try {
+    //   const response = await fetch(
+    //     `http://localhost/api/v1/users/add-ansiKey/${userId}`,
+    //     {
+    //       method: "POST",
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //         Authorization: `Bearer ${globalVariable}`,
+    //       },
+    //       body: JSON.stringify({
+    //         ansiKey: fingerprintKey,
+    //         ansiImageURL: fingerprintURL,
+    //       }),
+    //     }
+    //   );
+
+    //   const data = await response.json();
+
+    //   if (response.ok) {
+    //     setMessage("User registered successfully!");
+    //   } else {
+    //     setMessage(data.message || "Registration failed!");
+    //   }
+    // } catch (error) {
+    //   console.error("Error:", error);
+    //   setMessage("An error occurred. Please try again later.");
+    // }
   };
 
   const handleFingerprintCapture = async () => {
+    if (rollnumber === "") {
+      setMessage("Roll number is missing.");
+      return;
+    }
     try {
       const quality = 50;
       const timeout = 100;
@@ -101,10 +138,10 @@ function RegisterUser() {
       if (!response || !response.data) {
         throw new Error("No response data");
       }
-      
+
       const fingerprintImage = response.data.BitmapData;
       const fingerprintKey = response.data.AnsiTemplate;
-      const iso = response.data.IsoTemplate
+      const iso = response.data.IsoTemplate;
 
       const binaryString = window.atob(fingerprintImage);
       const binaryLength = binaryString.length;
@@ -143,50 +180,56 @@ function RegisterUser() {
     }
   };
   useEffect(() => {
-    const fetchMessCount= async()=>{
-      try{
+    const fetchMessCount = async () => {
+      try {
         const response = await fetch(
-          "http://localhost/api/v1/mess/get-mess-data/Old", {
+          "http://localhost/api/v1/mess/get-mess-data/Old",
+          {
             method: "GET",
             headers: {
-              'Content-Type': 'application/json',
-              "Authorization": `Bearer ${globalVariable}` // Ensure globalVariable contains the correct token
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${globalVariable}`, // Ensure globalVariable contains the correct token
             },
           }
         );
         const resData = await response.json();
-        console.log(" response of old : ",response);
-        console.log(" json response of old : ",resData);
-        setOldMessCount([resData.data.previousDayCount,resData.data.todayCount,resData.data.nextDayCount]);
-        if(response.ok){
+        console.log(" response of old : ", response);
+        console.log(" json response of old : ", resData);
+        setOldMessCount([
+          resData.data.previousDayCount,
+          resData.data.todayCount,
+          resData.data.nextDayCount,
+        ]);
+        if (response.ok) {
           console.log("old mess count fetched successfully");
-        }
-        else{
+        } else {
           console.log("error during old mess count fetching");
         }
 
         const response1 = await fetch(
-          "http://localhost/api/v1/mess/get-mess-data/New", {
+          "http://localhost/api/v1/mess/get-mess-data/New",
+          {
             method: "GET",
             headers: {
-              'Content-Type': 'application/json',
-              "Authorization": `Bearer ${globalVariable}` // Ensure globalVariable contains the correct token
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${globalVariable}`, // Ensure globalVariable contains the correct token
             },
           }
         );
         const resData1 = await response1.json();
-        console.log(" response of new : ",response1);
-        console.log(" json response of new : ",resData1);
-        setNewMessCount([resData1.data.previousDayCount,resData1.data.todayCount,resData1.data.nextDayCount]);
-        if(response.ok){
+        console.log(" response of new : ", response1);
+        console.log(" json response of new : ", resData1);
+        setNewMessCount([
+          resData1.data.previousDayCount,
+          resData1.data.todayCount,
+          resData1.data.nextDayCount,
+        ]);
+        if (response.ok) {
           console.log("old mess count fetched successfully");
-        }
-        else{
+        } else {
           console.log("error during old mess count fetching");
         }
-
-      }
-      catch(error){
+      } catch (error) {
         console.error("Error during mess data fetching:", error);
         setMessage("Fingerprint capture failed!");
       }
@@ -195,63 +238,67 @@ function RegisterUser() {
   }, []);
 
   return (
-    <div>
-      <div className="sign-up-page w-full h-full mt-10">
-        <div>
-          <p className="text-w-10 font-bold text-xl mb-5 item-center align-center">Register Students FingerPrint</p>
-          <form className="sign-up-form" onSubmit={handleSubmit}>
-            
-            <div className="form-group">
-              <label htmlFor="rollNumber">Roll Number</label>
-              <input
-                type="text"
-                id="rollNumber"
-                name="rollNumber"
-                value={rollnumber}
-                onChange={(e) => setRollNumber(e.target.value)}
-                required
-              />
-            </div>
-            <div className="form-group">
-              <label>Fingerprint Registration</label>
-              <button type="button" onClick={handleFingerprintCapture}>
-                Capture Fingerprint
-              </button>
-              {fingerprintImage && (
+    <div className="w-full min-h-screen bg-gray-100 flex items-center justify-center">
+      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md mx-auto">
+        <p className="text-2xl font-bold text-center text-gray-800 mb-6">
+          Register Students FingerPrint
+        </p>
+
+        <form className="space-y-6" onSubmit={handleSubmit}>
+          <div className="space-y-2">
+            <label
+              htmlFor="rollNumber"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Roll Number
+            </label>
+            <input
+              type="text"
+              id="rollNumber"
+              name="rollNumber"
+              value={rollnumber}
+              onChange={(e) => setRollNumber(e.target.value)}
+              required
+              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-gray-700">
+              Fingerprint Registration
+            </label>
+            <button
+              type="button"
+              onClick={handleFingerprintCapture}
+              className="w-full p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              Capture Fingerprint
+            </button>
+
+            {fingerprintImage && (
+              <div className="mt-4 flex justify-center">
                 <img
                   src={`data:image/jpeg;base64,${fingerprintImage}`}
                   alt="Fingerprint Image"
+                  className="max-w-[200px] border rounded-md shadow-sm"
                 />
-              )}
-            </div>
-            <button type="submit" className="submit-button">
-              Sign Up
-            </button>
-          </form>
-          {message && <p>{message}</p>}
-        </div>
-      </div>
-      <div className="student-count w-full max-w-4xl mx-auto rounded-lg shadow-lg mt-10 p-6 bg-gray-800 text-white">
-        <h2 className="text-2xl font-bold text-center mb-4 text-white">Number of Students Registered</h2>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-gray-700 p-4 rounded-lg">
-                <h3 className="text-lg font-semibold">Old Mess Data</h3>
-                <p className="mt-2">Previous Day Data: <span className="font-medium">{oldMessCount.length > 0 ? oldMessCount[0] : "No data available"}</span></p>
-                <p className="mt-1">Today Day Data: <span className="font-medium">{oldMessCount.length > 0 ? oldMessCount[1] : "No data available"}</span></p>
-                <p className="mt-1">Next Day Data: <span className="font-medium">{oldMessCount.length > 0 ? oldMessCount[2] : "No data available"}</span></p>
-            </div>
+              </div>
+            )}
+          </div>
 
-            <div className="bg-gray-700 p-4 rounded-lg">
-                <h3 className="text-lg font-semibold">New Mess Data</h3>
-                <p className="mt-2">Previous Day Data: <span className="font-medium">{newMessCount.length > 0 ? newMessCount[0] : "No data available"}</span></p>
-                <p className="mt-1">Today Day Data: <span className="font-medium">{newMessCount.length > 0 ? newMessCount[1] : "No data available"}</span></p>
-                <p className="mt-1">Next Day Data: <span className="font-medium">{newMessCount.length > 0 ? newMessCount[2] : "No data available"}</span></p>
-            </div>
-        </div>
+          <button
+            type="submit"
+            className="w-full p-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"
+          >
+            Add Fingerprint
+          </button>
+        </form>
+
+        {message && (
+          <p className="mt-4 text-center text-sm text-gray-600">{message}</p>
+        )}
+      </div>
     </div>
-    </div>
-    
   );
 }
 
