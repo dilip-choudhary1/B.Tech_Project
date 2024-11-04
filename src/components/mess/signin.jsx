@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../GlobalContext";
+// import './signup.css';
+// import './../../App.css';
 
 function SignIn1() {
   const { globalVariable, setGlobalVariable } = useGlobalContext();
@@ -33,10 +35,10 @@ function SignIn1() {
 
       if (response.ok && (role=='admin')) {
         localStorage.setItem("user", JSON.stringify({ rollnumber })); // Save user details in local storage
-        navigate("/register"); // Redirect to StudentCorner
+        navigate("/admin"); // Redirect to StudentCorner
       } else if (response.ok && role == "mess") {
         localStorage.setItem("user", JSON.stringify({ rollnumber })); // Save user details in local storage
-        navigate("/verify"); // Redirect to StudentCorner
+        navigate("/mess"); // Redirect to StudentCorner
       } 
       else {
         setMessage(res.message || "Login failed!");

@@ -223,10 +223,9 @@ function RegisterUser() {
   }, []);
 
   return (
-    <div>
-      <div className="sign-up-page w-full h-full mt-10">
+      <div className="sign-up-page w-full h-full mt-10 flex relative">
         <div>
-          <p className="text-w-10 font-bold text-xl mb-5 item-center align-center">Register Students FingerPrint</p>
+          <p className=" font-bold text-xl mb-5 item-center align-center">Register Students FingerPrint</p>
           <form className="sign-up-form" onSubmit={handleSubmit}>
             
             <div className="form-group">
@@ -259,26 +258,7 @@ function RegisterUser() {
           {message && <p>{message}</p>}
         </div>
       </div>
-      <div className="student-count w-full max-w-4xl mx-auto rounded-lg shadow-lg mt-10 p-6 bg-gray-800 text-white">
-        <h2 className="text-2xl font-bold text-center mb-4 text-white">Number of Students Registered</h2>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-gray-700 p-4 rounded-lg">
-                <h3 className="text-lg font-semibold">Old Mess Data</h3>
-                <p className="mt-2">Previous Day Data: <span className="font-medium">{oldMessCount.length > 0 ? oldMessCount[0] : "No data available"}</span></p>
-                <p className="mt-1">Today Day Data: <span className="font-medium">{oldMessCount.length > 0 ? oldMessCount[1] : "No data available"}</span></p>
-                <p className="mt-1">Next Day Data: <span className="font-medium">{oldMessCount.length > 0 ? oldMessCount[2] : "No data available"}</span></p>
-            </div>
-
-            <div className="bg-gray-700 p-4 rounded-lg">
-                <h3 className="text-lg font-semibold">New Mess Data</h3>
-                <p className="mt-2">Previous Day Data: <span className="font-medium">{newMessCount.length > 0 ? newMessCount[0] : "No data available"}</span></p>
-                <p className="mt-1">Today Day Data: <span className="font-medium">{newMessCount.length > 0 ? newMessCount[1] : "No data available"}</span></p>
-                <p className="mt-1">Next Day Data: <span className="font-medium">{newMessCount.length > 0 ? newMessCount[2] : "No data available"}</span></p>
-            </div>
-        </div>
-    </div>
-    </div>
+      
     
   );
 }

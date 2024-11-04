@@ -35,37 +35,11 @@
       }
     }, [selectedOption]);
 
-
     const handleOptionChange = (option) => setSelectedOption(option);
 
-    // QR Code submission handler
-    // const handleQRSubmit = async () => {
-    //   try {
-    //     setIsLoading(true);
-    //     const response = await fetch(`http://localhost/api/v1/users/get-roll-number-from-hash`, {
-    //       method: "POST",
-    //       headers: { "Content-Type": "application/json" },
-    //       body: JSON.stringify({ rollHash: rollnumber }),
-    //     });
-
-    //     const data = await response.json();
-    //     if (response.ok && data.rollNumber) {
-    //       setRollnumber(data.rollNumber);
-    //       await entryMess(); // Proceed with attendance marking
-    //     } else {
-    //       toast.error("Invalid QR code or student not found.");
-    //     }
-    //   } catch (error) {
-    //     console.error("Error verifying QR code:", error);
-    //     toast.error("Failed to verify QR code.");
-    //   } finally {
-    //     setIsLoading(false);
-    //   }
-    // };
-
     const enterWithQrCode = async () => {
-      if (!rollHash || !chooseMess) {
-        toast.error("Please provide both roll hash and mess selection.");
+      if (!rollHash) {
+        toast.error("Please provide roll hash");
         return;
       }
 
@@ -87,7 +61,6 @@
           },
           body: JSON.stringify({
             rollHash: cleanedRollHash,
-            mess: chooseMess,
           }),
         });
     
@@ -260,7 +233,7 @@
             "Content-Type": "application/json",
             "Authorization": `Bearer ${globalVariable}`
           },
-          body: JSON.stringify({ rollNumber: rollnumber, mess :chooseMess}),
+          body: JSON.stringify({ rollNumber: rollnumber}),
         });
 
         const res = await response.json();
@@ -339,7 +312,7 @@
     };
   {/* <ToastContainer /> */}
   return (
-      <div className="VerifyUser mt-10 flex flex-col items-center bg-white shadow-lg rounded-lg p-6">
+      <div className="VerifyUser w-1/3 mt-10 flex flex-col items-center bg-white shadow-lg rounded-lg p-6">
         <ToastContainer />
         <h2 className="text-2xl font-semibold text-gray-800 mb-4">Verify User Attendance</h2>
 
@@ -353,7 +326,7 @@
           </button>
         </div>
 
-        {/* Mess Selector */}
+        {/* Mess Selector
         <div className="form-group mb-4 w-full">
           <label htmlFor="role" className="block text-gray-700 mb-2">Mess</label>
           <select
@@ -367,7 +340,7 @@
             <option value="Old">Old</option>
             <option value="New">New</option>
           </select>
-        </div>
+        </div> */}
 
         {/* QR Code Scanner Section */}
         {selectedOption === "qrCode" && (

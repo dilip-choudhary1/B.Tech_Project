@@ -65,7 +65,7 @@ function SignUp() {
         setIsLoading(false);
         setMessage("User registered successfully!");
         // navigate("/sign-in");
-        navigate("/student-corner");
+        navigate("/student");
       } else {
         setMessage(data.message || "Registration failed!");
         setIsLoading(false);
