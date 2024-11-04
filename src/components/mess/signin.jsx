@@ -18,13 +18,16 @@ function SignIn1() {
     e.preventDefault();
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/users/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ role, password, email }),
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/users/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ role, password, email }),
+        }
+      );
 
       console.log("Printing the login", response);
 
@@ -34,14 +37,13 @@ function SignIn1() {
       setGlobalVariable(res.data.authToken);
       console.log("set global responce : ", globalVariable);
 
-      if (response.ok && (role=='admin')) {
+      if (response.ok && role == "admin") {
         localStorage.setItem("user", JSON.stringify({ rollnumber })); // Save user details in local storage
-        navigate("/admin"); // Redirect to StudentCorner
+        navigate("/admin/register"); // Redirect to StudentCorner
       } else if (response.ok && role == "mess") {
         localStorage.setItem("user", JSON.stringify({ rollnumber })); // Save user details in local storage
-        navigate("/mess"); // Redirect to StudentCorner
-      } 
-      else {
+        navigate("/mess/mess-entry"); // Redirect to StudentCorner
+      } else {
         setMessage(res.message || "Login failed!");
       }
     } catch (error) {
