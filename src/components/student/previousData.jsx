@@ -19,7 +19,7 @@ const StudentPreviousData = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:80/api/v1/mess/mess-data-student-bydate/${date}`,
+        `${import.meta.env.VITE_BACKEND_URL}/mess/mess-data-student-bydate/${date}`,
         {
           method: "GET",
           headers: {

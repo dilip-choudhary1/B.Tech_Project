@@ -19,7 +19,7 @@ const StudentsByRollNumber = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:80/api/v1/mess/mess-data-byrollnumber/${rollNumber}`,
+        `${import.meta.env.VITE_BACKEND_URL}/mess/mess-data-byrollnumber/${rollNumber}`,
         {
           method: "GET",
           headers: {
