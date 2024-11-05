@@ -162,6 +162,7 @@ const VerifyUser = () => {
         return data1.data._id;
       } else {
         // setMessage(data.message || "Registration failed!");
+        // toast.error(data1.message);
         return null;
       }
     } catch (error) {
@@ -256,6 +257,10 @@ const VerifyUser = () => {
 
         try {
           const userid = await fetchUserId(rollnumber);
+          if (!userid) {
+            toast.error("Roll number not found in the system.");
+            return false;
+          }
           const storedGalleryTemplate = await fetchStoredGalleryTemplate(
             userid
           );

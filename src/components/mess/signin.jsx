@@ -29,13 +29,13 @@ function SignIn1() {
         }
       );
 
-      console.log("Printing the login", response);
+      // console.log("Printing the login", response);
 
       const res = await response.json();
-      console.log(globalVariable);
-      console.log("api responce : ", res.data.authToken);
+      // console.log(globalVariable);
+      // console.log("api responce : ", res.data.authToken);
       setGlobalVariable(res.data.authToken);
-      console.log("set global responce : ", globalVariable);
+      // console.log("set global responce : ", globalVariable);
 
       if (response.ok && role == "admin") {
         localStorage.setItem("user", JSON.stringify({ rollnumber })); // Save user details in local storage
@@ -52,10 +52,10 @@ function SignIn1() {
     }
   };
   useEffect(() => {
-    console.log(
-      "localStorage globalVariable:",
-      localStorage.getItem("globalVariable")
-    );
+    // console.log(
+    //   "localStorage globalVariable:",
+    //   localStorage.getItem("globalVariable")
+    // );
   }, [globalVariable]);
 
   return (
