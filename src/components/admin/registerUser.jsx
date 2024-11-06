@@ -29,7 +29,7 @@ function RegisterUser() {
   const fetchUserID = async () => {
     try {
       const response = await fetch(
-        `http://localhost/api/v1/users/get-student/${rollnumber}`,
+        `${import.meta.env.VITE_BACKEND_URL}/users/get-student/${rollnumber}`,
         {
           method: "GET",
           headers: {
@@ -39,10 +39,10 @@ function RegisterUser() {
         }
       );
       const data1 = await response.json();
-      console.log("user id is : ", data1.data._id);
+      // console.log("user id is : ", data1.data._id);
       setUserId(data1.data._id);
-      console.log(userId);
-      console.log(globalVariable);
+      // console.log(userId);
+      // console.log(globalVariable);
       if (response.ok) {
         setMessage("data fetched Successfully");
         return data1.data._id;
@@ -62,7 +62,7 @@ function RegisterUser() {
     const userIID = await fetchUserID();
     try {
       const response = await fetch(
-        `http://localhost/api/v1/users/add-ansiKey/${userIID}`,
+        `${import.meta.env.VITE_BACKEND_URL}/users/add-ansiKey/${userIID}`,
         {
           method: "POST",
           headers: {
@@ -90,7 +90,7 @@ function RegisterUser() {
 
     // try {
     //   const response = await fetch(
-    //     `http://localhost/api/v1/users/add-ansiKey/${userId}`,
+    //     `${import.meta.env.VITE_BACKEND_URL}/users/add-ansiKey/${userId}`,
     //     {
     //       method: "POST",
     //       headers: {
@@ -125,15 +125,15 @@ function RegisterUser() {
     try {
       const quality = 50;
       const timeout = 100;
-      console.log(
-        "Calling CaptureFinger with quality:",
-        quality,
-        "and timeout:",
-        timeout
-      );
+      // console.log(
+      //   "Calling CaptureFinger with quality:",
+      //   quality,
+      //   "and timeout:",
+      //   timeout
+      // );
 
       const response = await CaptureFinger(quality, timeout);
-      console.log("Fingerprint Capture Response:", response);
+      // console.log("Fingerprint Capture Response:", response);
 
       if (!response || !response.data) {
         throw new Error("No response data");
@@ -147,7 +147,7 @@ function RegisterUser() {
       const binaryLength = binaryString.length;
       const binaryArray = new Uint8Array(binaryLength);
       const response1 = await VerifyFinger(iso, iso);
-      console.log("Verify Response:", response1);
+      // console.log("Verify Response:", response1);
 
       for (let i = 0; i < binaryLength; i++) {
         binaryArray[i] = binaryString.charCodeAt(i);
@@ -170,10 +170,10 @@ function RegisterUser() {
       setFingerprintImage(fingerprintImage);
       setFingerprintKey(fingerprintKey);
 
-      console.log(
-        "Fingerprint image uploaded successfully. Image URL:",
-        imageUrl
-      );
+      // console.log(
+      //   "Fingerprint image uploaded successfully. Image URL:",
+      //   imageUrl
+      // );
     } catch (error) {
       console.error("Error during fingerprint capture:", error);
       setMessage("Fingerprint capture failed!");
@@ -183,7 +183,7 @@ function RegisterUser() {
     const fetchMessCount = async () => {
       try {
         const response = await fetch(
-          "http://localhost/api/v1/mess/get-mess-data/Old",
+          `${import.meta.env.VITE_BACKEND_URL}/mess/get-mess-data/Old`,
           {
             method: "GET",
             headers: {
@@ -193,8 +193,8 @@ function RegisterUser() {
           }
         );
         const resData = await response.json();
-        console.log(" response of old : ", response);
-        console.log(" json response of old : ", resData);
+        // console.log(" response of old : ", response);
+        // console.log(" json response of old : ", resData);
         setOldMessCount([
           resData.data.previousDayCount,
           resData.data.todayCount,
@@ -207,7 +207,7 @@ function RegisterUser() {
         }
 
         const response1 = await fetch(
-          "http://localhost/api/v1/mess/get-mess-data/New",
+          `${import.meta.env.VITE_BACKEND_URL}/mess/get-mess-data/New`,
           {
             method: "GET",
             headers: {
@@ -217,8 +217,8 @@ function RegisterUser() {
           }
         );
         const resData1 = await response1.json();
-        console.log(" response of new : ", response1);
-        console.log(" json response of new : ", resData1);
+        // console.log(" response of new : ", response1);
+        // console.log(" json response of new : ", resData1);
         setNewMessCount([
           resData1.data.previousDayCount,
           resData1.data.todayCount,

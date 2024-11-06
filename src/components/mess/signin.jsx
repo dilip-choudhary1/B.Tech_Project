@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../GlobalContext";
 // import './signup.css';
 // import './../../App.css';
+import dotenv from "dotenv";
 
 function SignIn1() {
   const { globalVariable, setGlobalVariable } = useGlobalContext();
@@ -17,23 +18,26 @@ function SignIn1() {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost/api/v1/users/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ role, password, email }),
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/users/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ role, password, email }),
+        }
+      );
 
-      console.log("Printing the login", response);
+      // console.log("Printing the login", response);
 
       const res = await response.json();
-      console.log(globalVariable);
-      console.log("api responce : ", res.data.authToken);
+      // console.log(globalVariable);
+      // console.log("api responce : ", res.data.authToken);
       setGlobalVariable(res.data.authToken);
-      console.log("set global responce : ", globalVariable);
+      // console.log("set global responce : ", globalVariable);
 
-      if (response.ok && (role=='admin')) {
+      if (response.ok && role == "admin") {
         localStorage.setItem("user", JSON.stringify({ rollnumber })); // Save user details in local storage
         navigate("/admin/register"); // Redirect to StudentCorner
       } else if (response.ok && role == "mess") {
@@ -49,10 +53,10 @@ function SignIn1() {
     }
   };
   useEffect(() => {
-    console.log(
-      "localStorage globalVariable:",
-      localStorage.getItem("globalVariable")
-    );
+    // console.log(
+    //   "localStorage globalVariable:",
+    //   localStorage.getItem("globalVariable")
+    // );
   }, [globalVariable]);
 
   return (

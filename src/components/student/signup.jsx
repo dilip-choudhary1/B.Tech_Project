@@ -3,10 +3,10 @@ import { useState } from "react";
 import { CaptureFinger, VerifyFinger } from "../scanner.js";
 import { useNavigate } from "react-router-dom";
 import SignIn from "./signin.jsx";
-import { useGlobalContext } from '../GlobalContext';
+import { useGlobalContext } from "../GlobalContext";
 
 function SignUp() {
-  const { globalVariable, setGlobalVariable} = useGlobalContext();
+  const { globalVariable, setGlobalVariable } = useGlobalContext();
   const [email, setEmail] = useState("");
   // const [role, setRole] = useState("");
   const [rollnumber, setRollNumber] = useState("");
@@ -28,14 +28,14 @@ function SignUp() {
   });
 
   const handleSubmit = async (e) => {
-    setIsLoading(true)
+    setIsLoading(true);
     e.preventDefault();
 
     if (password !== confirmPassword) {
       setMessage("Passwords do not match!");
       return;
     }
-    const role ="students";
+    const role = "students";
     const dataToSend = {
       role,
       email,
@@ -46,20 +46,22 @@ function SignUp() {
     };
     console.log(dataToSend);
     try {
-      const response = await fetch("http://localhost/api/v1/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(dataToSend),
-        // console.log(body);
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/users`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(dataToSend),
+          // console.log(body);
+        }
+      );
 
       const data = await response.json();
       console.log(response);
 
       if (response.ok) {
-
         setGlobalVariable(data.data.authToken);
 
         setIsLoading(false);
@@ -94,10 +96,10 @@ function SignUp() {
       if (!response || !response.data) {
         throw new Error("No response data");
       }
-      
+
       const fingerprintImage = response.data.BitmapData;
       const fingerprintKey = response.data.AnsiTemplate;
-      const iso = response.data.IsoTemplate
+      const iso = response.data.IsoTemplate;
 
       const binaryString = window.atob(fingerprintImage);
       const binaryLength = binaryString.length;
@@ -130,7 +132,6 @@ function SignUp() {
         "Fingerprint image uploaded successfully. Image URL:",
         imageUrl
       );
-      
     } catch (error) {
       console.error("Error during fingerprint capture:", error);
       setMessage("Fingerprint capture failed!");
@@ -139,7 +140,9 @@ function SignUp() {
 
   return (
     <div className="sign-up-page w-screen h-full mt-10 items-center justify-center">
-      <p className="text-w-10 font-bold text-3xl item-center align-center">Sign Up</p>
+      <p className="text-w-10 font-bold text-3xl item-center align-center">
+        Sign Up
+      </p>
       <form className="sign-up-form w-full h-full mt-5" onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="email">IITJ Email</label>
@@ -202,16 +205,23 @@ function SignUp() {
           )}
         </div> */}
         <button type="submit" className="submit-button mb-5">
-        {isLoading ?" Loading... ":" Sign Up "}
+          {isLoading ? " Loading... " : " Sign Up "}
         </button>
-        
       </form>
       <h2>If Already Registered Sign In </h2>
-      <button type="signin" className="submit-button w-full" onClick={() => navigate("/sign-in")}>
-      {" Sign In "}
+      <button
+        type="signin"
+        className="submit-button w-full"
+        onClick={() => navigate("/sign-in")}
+      >
+        {" Sign In "}
       </button>
-      <button type="signin" className="submit-button w-full mt-2" onClick={() => navigate("/")}>
-      {" Home "}
+      <button
+        type="signin"
+        className="submit-button w-full mt-2"
+        onClick={() => navigate("/")}
+      >
+        {" Home "}
       </button>
       {message && <p>{message}</p>}
     </div>

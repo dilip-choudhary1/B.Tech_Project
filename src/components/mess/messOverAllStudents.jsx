@@ -12,7 +12,7 @@ function messOverAllStudents() {
     const fetchMessCount = async () => {
       try {
         const oldResponse = await fetch(
-          "http://localhost/api/v1/mess/get-mess-data/Old",
+          `${import.meta.env.VITE_BACKEND_URL}/mess/get-mess-data/Old`,
           {
             method: "GET",
             headers: {
@@ -29,7 +29,7 @@ function messOverAllStudents() {
         ]);
 
         const newResponse = await fetch(
-          "http://localhost/api/v1/mess/get-mess-data/New",
+          `${import.meta.env.VITE_BACKEND_URL}/mess/get-mess-data/New`,
           {
             method: "GET",
             headers: {

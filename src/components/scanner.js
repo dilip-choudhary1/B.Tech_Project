@@ -1,12 +1,12 @@
-
 const secureUri = "https://localhost:8003/mfs100/"; //Secure
 const insecureUri = "http://localhost:8004/mfs100/"; // Non-Secure
 
-export const GetMFS100Info = async () => { //capture button
+export const GetMFS100Info = async () => {
+  //capture button
   return await GetMFS100Client("info");
 };
 
-const GetMFS100KeyInfo = async (key) => { 
+const GetMFS100KeyInfo = async (key) => {
   const MFS100Request = {
     Key: key,
   };
@@ -14,13 +14,14 @@ const GetMFS100KeyInfo = async (key) => {
   return await PostMFS100Client("keyinfo", jsondata);
 };
 
-export const CaptureFinger = async (quality, timeout) => { // 2nd
+export const CaptureFinger = async (quality, timeout) => {
+  // 2nd
   const MFS100Request = {
     Quality: quality,
     TimeOut: timeout,
   };
   const jsondata = JSON.stringify(MFS100Request);
-  
+
   return await PostMFS100Client("capture", jsondata);
 };
 
@@ -42,7 +43,7 @@ export const VerifyFinger = async (ProbFMR, GalleryFMR) => {
     BioType: "FMR", // or "ANSI" if using ANSI Template
   };
   const jsondata = JSON.stringify(MFS100Request);
-  console.log("json data: ",jsondata);
+  // console.log("json data: ",jsondata);
   return await PostMFS100Client("verify", jsondata);
 };
 

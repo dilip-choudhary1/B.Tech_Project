@@ -53,7 +53,7 @@ function StudentCorner() {
     try {
       const user = JSON.parse(localStorage.getItem('user'));
       setMessChoice(mess);
-      const response = await fetch(`http://localhost/api/v1/mess/choose-mess`, {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/mess/choose-mess`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

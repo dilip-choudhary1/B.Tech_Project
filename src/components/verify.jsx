@@ -10,7 +10,7 @@ function Verify(){
         e.preventDefault();
 
         try {
-            const response = await fetch("http://localhost:80/api/v1/users/verify-finger", {
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/users/verify-finger`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

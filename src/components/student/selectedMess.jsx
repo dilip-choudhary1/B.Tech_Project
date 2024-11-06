@@ -14,7 +14,7 @@ const SelectedMessdata = () => {
   const fetchPreviousData = async () => {
     try {
       const response = await fetch(
-        "http://localhost:80/api/v1/mess/mess-data-previous",
+        `${import.meta.env.VITE_BACKEND_URL}/mess/mess-data-previous`,
         {
           method: "GET",
           headers: {

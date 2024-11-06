@@ -18,9 +18,9 @@ const StudentsByDate = () => {
     }
 
     try {
-      console.log(`http://localhost:80/api/v1/mess/mess-data-byDate/${date}`);
+      console.log(`${import.meta.env.VITE_BACKEND_URL}/mess/mess-data-byDate/${date}`);
       const response = await fetch(
-        `http://localhost:80/api/v1/mess/mess-data-byDate/${date}`,
+        `${import.meta.env.VITE_BACKEND_URL}/mess/mess-data-byDate/${date}`,
         {
           method: "GET",
           headers: {
