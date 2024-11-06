@@ -210,6 +210,9 @@ function SignUp() {
       <button type="signin" className="submit-button w-full" onClick={() => navigate("/sign-in")}>
       {" Sign In "}
       </button>
+      <button type="signin" className="submit-button w-full mt-2" onClick={() => navigate("/")}>
+      {" Home "}
+      </button>
       {message && <p>{message}</p>}
     </div>
   );

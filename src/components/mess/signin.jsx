@@ -35,10 +35,10 @@ function SignIn1() {
 
       if (response.ok && (role=='admin')) {
         localStorage.setItem("user", JSON.stringify({ rollnumber })); // Save user details in local storage
-        navigate("/admin"); // Redirect to StudentCorner
+        navigate("/admin/register"); // Redirect to StudentCorner
       } else if (response.ok && role == "mess") {
         localStorage.setItem("user", JSON.stringify({ rollnumber })); // Save user details in local storage
-        navigate("/mess"); // Redirect to StudentCorner
+        navigate("/mess/mess-entry"); // Redirect to StudentCorner
       } 
       else {
         setMessage(res.message || "Login failed!");
@@ -96,6 +96,9 @@ function SignIn1() {
         </div>
         <button type="submit" className="submit-button">
           Sign In
+        </button>
+        <button type="submit" className="submit-button mt-3" onClick={() => navigate("/")}>
+          {"Home"}
         </button>
       </form>
       {message && <p>{message}</p>}

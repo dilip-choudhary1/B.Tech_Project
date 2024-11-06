@@ -73,6 +73,15 @@ function SignIn() {
         <button type="submit" className="submit-button">
           Sign In
         </button>
+        <div className="flex w-full gap-4 mt-2">
+          <button type="signin" className="submit-button w-full mt-2 flex" onClick={() => navigate("/sign-up")}>
+        {" Sign Up "}
+        </button>
+        <button type="signin" className="submit-button w-full  mt-2 flex" onClick={() => navigate("/")}>
+        {" Home "}
+        </button>
+        </div>
+        
       </form>
       {message && <p>{message}</p>}
     </div>
