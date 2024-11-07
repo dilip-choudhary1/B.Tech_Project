@@ -2,6 +2,9 @@ import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { useState, useEffect } from "react";
 import { useGlobalContext } from "../GlobalContext.jsx";
 import { CaptureFinger, VerifyFinger } from "../scanner.js";
+import Rect from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function RegisterUser() {
   const [email, setEmail] = useState("");
@@ -79,9 +82,11 @@ function RegisterUser() {
       const data = await response.json();
 
       if (response.ok) {
-        setMessage("User registered successfully!");
+        toast.success(data.message);
+        setMessage("User fingerprint registration done successfully!");
       } else {
-        setMessage(data.message || "Registration failed!");
+        setMessage(data.message);
+        toast.error(data.message);
       }
     } catch (error) {
       console.error("here Error:", error);
@@ -120,6 +125,7 @@ function RegisterUser() {
   const handleFingerprintCapture = async () => {
     if (rollnumber === "") {
       setMessage("Roll number is missing.");
+      toast.error("Roll number is missing.");
       return;
     }
     try {
@@ -177,6 +183,7 @@ function RegisterUser() {
     } catch (error) {
       console.error("Error during fingerprint capture:", error);
       setMessage("Fingerprint capture failed!");
+      toast.error("Fingerprint capture failed!");
     }
   };
   useEffect(() => {
@@ -239,6 +246,7 @@ function RegisterUser() {
 
   return (
     <div className="w-full min-h-screen bg-gray-100 flex items-center justify-center">
+      <ToastContainer />
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md mx-auto">
         <p className="text-2xl font-bold text-center text-gray-800 mb-6">
           Register Students FingerPrint
