@@ -55,7 +55,7 @@ function SignUp() {
         // Show success toast and navigate after a short delay
         toast.success("Registration successful! Redirecting...");
         setTimeout(() => {
-          navigate("/student/select-mess");
+          navigate("/student");
         }, 2000);
       } else {
         setMessage(data.message || "Registration failed!");
