@@ -18,7 +18,7 @@ const NavbarStudent = () => {
   return (
     <nav className="bg-gray p-4 ">
       <div className="container flex justify-between items-center ">
-        <Link to="/mess" className="text-white text-lg font-bold">
+        <Link to="/student" className="text-white text-lg font-bold">
           Student Dashboard
         </Link>
         <div className="hidden md:flex space-x-4">
@@ -40,6 +40,12 @@ const NavbarStudent = () => {
               className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded"
             >
               Selected Mess
+            </Link>
+            <Link
+              to="/student/generate-new-qr"
+              className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded"
+            >
+              Generate QR
             </Link>
           </>
         </div>

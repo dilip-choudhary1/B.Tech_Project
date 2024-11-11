@@ -196,11 +196,12 @@ const VerifyUser = () => {
         setIsLoading(false);
         return decryptedKey;
       } else {
-        throw new Error(result.message || "Failed to fetch stored fingerprint");
+        // throw new Error(result.message || "Failed to fetch stored fingerprint");
+
         setIsLoading(false);
       }
     } catch (error) {
-      toast.error("Error fetching fingerprint data: " + error.message);
+      toast.error(result.data.message);
       setIsLoading(false);
       return null;
     } finally {

@@ -33,7 +33,7 @@ function SignIn() {
 
       if (response.ok) {
         localStorage.setItem("user", JSON.stringify({ rollnumber })); // Save user details in local storage
-        navigate("/student/select-mess");
+        navigate("/student");
       } else {
         setMessage(res.message || "Login failed!");
       }

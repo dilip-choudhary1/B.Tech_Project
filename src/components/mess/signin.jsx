@@ -39,10 +39,10 @@ function SignIn1() {
 
       if (response.ok && role == "admin") {
         localStorage.setItem("user", JSON.stringify({ rollnumber })); // Save user details in local storage
-        navigate("/admin/register"); // Redirect to StudentCorner
+        navigate("/admin"); // Redirect to StudentCorner
       } else if (response.ok && role == "mess") {
         localStorage.setItem("user", JSON.stringify({ rollnumber })); // Save user details in local storage
-        navigate("/mess/mess-entry"); // Redirect to StudentCorner
+        navigate("/mess"); // Redirect to StudentCorner
       } 
       else {
         setMessage(res.message || "Login failed!");
